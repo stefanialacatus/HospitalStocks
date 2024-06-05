@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import './Inventory.css';
+import { useState, useEffect } from 'react';
 
 function SearchBar() {
     return (
@@ -130,16 +131,16 @@ export default function Inventory() {
     setListType(prevType => prevType === 'Medicines' ? 'Illness Groups' : 'Medicines');
   };
 
-  const medicines = [
-    { name: "Augmentin 625 Duo Tablet", dosageForm: "tablet", illness: "Generic Medicine", stock: 350, id: "D06ID232435450" },
-    { name: "Azithral 500 Tablet", dosageForm: "injection", illness: "Generic Medicine", stock: 20, id: "D06ID232435455" },
-    { name: "Ascoril LS Syrup", dosageForm: "inhaler", illness: "Diabetes", stock: 85, id: "D06ID232435456" },
-    { name: "Azee 500 Tablet", dosageForm: "D06ID232435450", illness: "Generic Medicine", stock: 75, id: "D06ID232435457" },
-    { name: "Allegra 120mg Tablet", dosageForm: "D06ID232435455", illness: "Diabetes", stock: 44, id: "D06ID232435458" },
-    { name: "Alex Syrup", dosageForm: "D06ID232435455", illness: "Generic Medicine", stock: 65, id: "D06ID232435455" },
-    { name: "Amoxyclav 625 Tablet", dosageForm: "D06ID232435455", illness: "Generic Medicine", stock: 150, id: "D06ID232435457" },
-    { name: "Avil 25 Tablet", dosageForm: "D06ID232435455", illness: "Generic Medicine", stock: 270, id: "D06ID232435458" },
-  ];
+  useEffect(() => {
+    // Fetch data from API
+    fetch('/drugstock/drugsInPage?page=1') // Adjust the URL as needed
+      .then(response => response.json())
+      .then(data => {
+        setMedicines(data); 
+      })
+      .catch(error => console.error('Error fetching medicines:', error));
+  }, []); 
+
 
   const handleAddNewEntryClick = () => {
     setShowAddNewEntryPopup(true);
@@ -186,3 +187,4 @@ export default function Inventory() {
     </>
   );
 }
+export default Inventory;
