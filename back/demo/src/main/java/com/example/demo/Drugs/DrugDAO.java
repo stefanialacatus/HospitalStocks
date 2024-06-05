@@ -7,17 +7,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class DrugDAO {
+public interface DrugDAO {
 
-    private final JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public DrugDAO(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+    static JdbcTemplate jdbcTemplate = null;
 
     // Select All Drugs
-    public List<Drugs> selectAllDrugs() {
+    public static List<Drugs> getAllDrugs() {
         String query = "SELECT * FROM drugs";
         return jdbcTemplate.query(query, (rs, rowNum) -> {
             Drugs drug = new Drugs();
@@ -29,7 +24,7 @@ public class DrugDAO {
         });
     }
 
-    public Drugs findById(int id) {
+    public static Drugs findById(int id) {
         String query = "SELECT * FROM drugs WHERE id = ?";
         return jdbcTemplate.queryForObject(query, new Object[]{id}, (rs, rowNum) -> {
             Drugs drug = new Drugs();
@@ -41,7 +36,7 @@ public class DrugDAO {
         });
     }
 
-    public List<Drugs> findByName(String name) {
+    public static List<Drugs> findByName(String name) {
         String query = "SELECT * FROM drugs WHERE name LIKE ?";
         return jdbcTemplate.query(query, new Object[]{"%" + name + "%"}, (rs, rowNum) -> {
             Drugs drug = new Drugs();

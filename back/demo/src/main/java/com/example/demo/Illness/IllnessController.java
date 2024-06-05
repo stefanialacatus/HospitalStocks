@@ -1,8 +1,29 @@
 package com.example.demo.Illness;
 
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
+@RequestMapping("/illnesses")
 public class IllnessController {
-    // Define RESTful endpoints for Illness operations
+
+    @Autowired
+    private IllnessService illnessService;
+
+    @GetMapping("/getAllIllnesses")
+    public List<Illness> getAllIllnesses() {
+        return illnessService.getAllIllnesses();
+    }
+
+    @GetMapping("/{id}")
+    public Illness getIllnessById(@PathVariable("id") int id) {
+        return illnessService.getIllnessById(id);
+    }
+
+    @GetMapping("/findByName")
+    public List<Illness> searchIllnessesByName(@RequestParam("name") String name) {
+        return illnessService.searchIllnessesByName(name);
+    }
 }
