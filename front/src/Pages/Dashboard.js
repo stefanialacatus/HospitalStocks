@@ -23,7 +23,6 @@ export default function Dashboard() {
   const [dashboardData, setDashboardData] = useState(null);
 
   useEffect(() => {
-    // Fetch data from the backend API
     fetch("http://localhost:8080/dashboard/summary")
       .then(response => response.json())
       .then(data => setDashboardData(data))
@@ -34,8 +33,6 @@ export default function Dashboard() {
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     return months[new Date().getMonth()];
   };
-  
-  // Function to get the current year
   const getCurrentYear = () => {
     return new Date().getFullYear();
   };
@@ -115,7 +112,7 @@ export default function Dashboard() {
                 <p className="section-description">Total no of Medicines</p>
               </div>
               <div className="section-item">
-                <h3 className="section-value">{"No data"}</h3>
+                <h3 className="section-value">{dashboardData? `${dashboardData.illnesses.totalIllnesses}` :"No data"}</h3>
                 <p className="section-description">Illnesses</p>
               </div>
             </div>

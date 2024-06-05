@@ -7,19 +7,4 @@ import java.util.List;
 
 @Service
 public class IllnessService {
-
-    @Autowired
-    private IllnessDAO illnessDAO;
-
-    public List<Illness> getAllIllnesses() {
-        return illnessDAO.selectAllIllnesses();
-    }
-
-    public Illness getIllnessById(int id) {
-        return illnessDAO.findById(id);
-    }
-
-    public List<Illness> searchIllnessesByName(String name) {
-        return illnessDAO.findByName(name);
-    }
 }

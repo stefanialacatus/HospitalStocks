@@ -51,4 +51,8 @@ public class DrugDAO {
             return drug;
         });
     }
+    public static int getCount() {
+        String sql = "SELECT COUNT(*) FROM drugs";
+        return jdbcTemplate.queryForObject(sql, Integer.class);
+    }
 }

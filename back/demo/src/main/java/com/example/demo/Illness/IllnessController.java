@@ -9,21 +9,18 @@ import java.util.List;
 @RequestMapping("/illnesses")
 public class IllnessController {
 
-    @Autowired
-    private IllnessService illnessService;
-
     @GetMapping("/getAllIllnesses")
     public List<Illness> getAllIllnesses() {
-        return illnessService.getAllIllnesses();
+        return IllnessDAO.getAllIllnesses();
     }
 
     @GetMapping("/{id}")
     public Illness getIllnessById(@PathVariable("id") int id) {
-        return illnessService.getIllnessById(id);
+        return IllnessDAO.findById(id);
     }
 
     @GetMapping("/findByName")
     public List<Illness> searchIllnessesByName(@RequestParam("name") String name) {
-        return illnessService.searchIllnessesByName(name);
+        return IllnessDAO.findByName(name);
     }
 }
