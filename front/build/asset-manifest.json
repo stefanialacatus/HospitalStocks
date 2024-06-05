@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/static/css/main.5a8cbac6.css",
+    "main.js": "/static/js/main.a9c0e4b5.js",
+    "static/js/453.3669db72.chunk.js": "/static/js/453.3669db72.chunk.js",
+    "static/media/lidl.jpg": "/static/media/lidl.1612b8861dd850c09700.jpg",
+    "static/media/penny.jpg": "/static/media/penny.512d05ca206345259717.jpg",
+    "static/media/mega.jpg": "/static/media/mega.9fd1039a433a4c2d11e3.jpg",
+    "static/media/auchan.jpg": "/static/media/auchan.be519754a80ad73662c8.jpg",
+    "static/media/profi.jpg": "/static/media/profi.f132c9189cf14127b758.jpg",
+    "static/media/grocery_store.jpeg": "/static/media/grocery_store.f70a287344024e840bb0.jpeg",
+    "static/media/dedeman.jpg": "/static/media/dedeman.98be514d8c0e4ec8f9f4.jpg",
+    "static/media/kaufland.jpg": "/static/media/kaufland.aecda35f3a0bab8b9340.jpg",
+    "static/media/icon.png": "/static/media/icon.eb8073289de8df91ad89.png",
+    "static/media/house_icon.png": "/static/media/house_icon.ee3abaef6dd05835c062.png",
+    "static/media/Menu-hover.png": "/static/media/Menu-hover.80d40dfe6b6930df8478.png",
+    "static/media/Logo.png": "/static/media/Logo.a09ba53c156a9f0c1458.png",
+    "index.html": "/index.html",
+    "main.5a8cbac6.css.map": "/static/css/main.5a8cbac6.css.map",
+    "main.a9c0e4b5.js.map": "/static/js/main.a9c0e4b5.js.map",
+    "453.3669db72.chunk.js.map": "/static/js/453.3669db72.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5a8cbac6.css",
+    "static/js/main.a9c0e4b5.js"
+  ]
+}

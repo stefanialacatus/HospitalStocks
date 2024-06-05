@@ -1,0 +1,280 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+body {
+    margin: 0; /* Remove default body margin */
+    background-color: #edf1f5; /* Apply background color */
+  }
+
+.header {
+    background-color: #7a6783;
+    display: flex;
+    justify-content: center;
+    padding: 9px 60px;
+    color: #fff;
+}
+
+.header-content {
+    display: flex;
+    width: 100%;
+    max-width: 1005px;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.header-left,
+.header-center,
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.header-logo {
+    width: 42px;
+    margin-right: 16px;
+}
+
+.header-name {
+    font-family: Poppins, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.header-center {
+    font-family: Poppins, sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.header-notification-icon {
+    width: 11px;
+    margin-right: 16px;
+}
+
+.header-notification-text {
+    font-family: Poppins, sans-serif;
+    font-size: 14px;
+}
+
+.header-notification-count {
+    background-color: #bc5e58;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Poppins, sans-serif;
+    font-size: 10px;
+}
+
+.main-cont {
+    background-color: #edf1f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.introducere {
+    margin-top: 36px;
+    text-align: left; 
+    width: 100%;
+    max-width: 1005px;
+}
+
+.title-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    color: #848A91; 
+    font-family: Poppins, sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.subtitle {
+    color: black; /* Default color for subtitle */
+    font-family: Poppins, sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.buttons button {
+    padding: 8px 16px;
+    font-family: Poppins, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+    background-color: #7a6783;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.buttons button:hover {
+    background-color: #6a5872;
+}
+
+.search-bar-container {
+    display: flex;
+    gap: 5px;
+    justify-content: space-between;
+    margin-top: 5px;
+    width: 100%;
+    max-width: 1005px;
+}
+
+.search-input-container {
+    display: flex;
+    gap: 5px;
+    padding: 3px 3px;
+    background-color: #f1f1f1;
+    color: #333;
+    border-radius: 4px;
+    align-items: center;
+    background-color: #E3EBF3;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: none;
+    padding: 5px;
+}
+
+.search-icon {
+    width: 14px;
+    height: 14px;
+}
+
+.filter-container {
+    position: relative;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.filter-icon {
+    width: 14px;
+    height: 14px;
+}
+
+.filter-dropdown {
+    position: relative;
+    text-align: center;
+    color: rgb(123, 123, 123);
+    margin-bottom: 10px;
+    margin-left: 10px; /* Adjust this value to move the dropdown button to the right */
+}
+
+.filter-dropdown select {
+    padding: 8px 30px 8px 10px; /* Adjust padding to accommodate the icon */
+    border: none; /* Remove the border */
+    border-radius: 4px; /* Add border radius */
+    background-color: #fff; /* Set background color */
+    font-family: 'Poppins', sans-serif; /* Set font family */
+    cursor: pointer; /* Change cursor to pointer */
+    -webkit-appearance: none; /* Remove default appearance */
+    -moz-appearance: none; /* Remove default appearance */
+    appearance: none; /* Remove default appearance */
+    position: relative; /* Position relative for the icon */
+}
+
+.filter-dropdown select:hover,
+.filter-dropdown select:focus {
+    border-color: #7a6783; /* Change border color on hover and focus */
+}
+
+.filter-dropdown select option {
+    padding: 8px 10px; /* Adjust padding */
+    font-family: 'Poppins', sans-serif; /* Set font family */
+}
+
+.dropdown-icon {
+    position: absolute; /* Position the icon absolutely */
+    top: 50%; /* Align vertically */
+    right: 10px; /* Adjust distance from the right */
+    transform: translateY(-50%); /* Center vertically */
+    width: 14px; /* Set width */
+    height: 14px; /* Set height */
+    pointer-events: none; /* Disable pointer events */
+}
+
+
+
+
+.medicines-table {
+    margin-top: 7px;
+    width: 100%;
+    background-color: white;
+    border-collapse: collapse;
+  }
+  
+  .medicines-table th,
+  .medicines-table td {
+    font-family: 'Poppins', sans-serif;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .medicines-table th {
+    font-size: 18px;
+    border-bottom: 1px solid #e0e0e0;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500; /* Medium weight */
+  }
+  
+  .medicines-table td {
+    border-top: 1px solid #e0e0e0;
+  }
+  
+  .medicine-list-item td {
+    padding: 10px;
+  }
+  
+  .view-details {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    color: #007bff;
+  }
+  
+  .view-details:hover {
+    text-decoration: underline;
+  }
+  
+  .detail-icon {
+    width: 10px;
+    height: 10px;
+  }
+
+.pagination-container {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1005px;
+    padding: 10px 0;
+}
+
+.pagination-controls {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.pagination-icon {
+    width: 20px;
+    height: 20px;
+}
+
