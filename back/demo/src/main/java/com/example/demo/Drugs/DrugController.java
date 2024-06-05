@@ -10,20 +10,20 @@ import java.util.List;
 public class DrugController {
 
     @Autowired
-    private DrugService drugService;
+    private DrugDAO drugService;
 
     @GetMapping("/getAllDrugs")
     public List<Drugs> getAllDrugs() {
-        return drugService.getAllDrugs();
+        return DrugDAO.getAllDrugs();
     }
 
     @GetMapping("/{id}")
     public Drugs getDrugById(@PathVariable("id") int id) {
-        return drugService.getDrugById(id);
+        return DrugDAO.findById(id);
     }
 
     @GetMapping("/findByName")
     public List<Drugs> searchDrugsByName(@RequestParam("name") String name) {
-        return drugService.searchDrugsByName(name);
+        return DrugDAO.findByName(name);
     }
 }

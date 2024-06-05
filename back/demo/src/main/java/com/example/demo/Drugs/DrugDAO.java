@@ -7,18 +7,22 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DrugDAO {
+public class DrugDAO {
 
-    static JdbcTemplate jdbcTemplate = null;
+    private static JdbcTemplate jdbcTemplate = null;
 
-    // Select All Drugs
+    @Autowired
+    public DrugDAO(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
     public static List<Drugs> getAllDrugs() {
         String query = "SELECT * FROM drugs";
         return jdbcTemplate.query(query, (rs, rowNum) -> {
             Drugs drug = new Drugs();
             drug.setId(rs.getInt("id"));
             drug.setName(rs.getString("name"));
-            drug.setDosageForm(rs.getString("dosage_form")); // Ensure correct column name
+            drug.setDosageForm(rs.getString("dosage_form"));
             drug.setPrice(rs.getBigDecimal("price"));
             return drug;
         });
@@ -30,7 +34,7 @@ public interface DrugDAO {
             Drugs drug = new Drugs();
             drug.setId(rs.getInt("id"));
             drug.setName(rs.getString("name"));
-            drug.setDosageForm(rs.getString("dosage_form")); // Ensure correct column name
+            drug.setDosageForm(rs.getString("dosage_form"));
             drug.setPrice(rs.getBigDecimal("price"));
             return drug;
         });
@@ -42,7 +46,7 @@ public interface DrugDAO {
             Drugs drug = new Drugs();
             drug.setId(rs.getInt("id"));
             drug.setName(rs.getString("name"));
-            drug.setDosageForm(rs.getString("dosage_form")); // Ensure correct column name
+            drug.setDosageForm(rs.getString("dosage_form"));
             drug.setPrice(rs.getBigDecimal("price"));
             return drug;
         });

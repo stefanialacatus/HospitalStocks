@@ -68,7 +68,7 @@ export default function Dashboard() {
             imageSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/1c2839e7a18d51d5dc801d3ae6a13969314146eaf79a3110e2be3464e7e499a6?apiKey=166a782ca6344aad902f23b81529b6b9&"
             altText="Good Inventory Status"
             title="Inventory Status"
-            value={dashboardData ? `Rs. ${dashboardData.inventory.status}` : "No data"}
+            value={dashboardData ? `${dashboardData.inventory.status}` : "No data"}
             viewText="View Detailed Statistic"
           />
           <Card
@@ -77,7 +77,7 @@ export default function Dashboard() {
             imageSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/7aec50645de34d85a4de3ccc837680bef90c56fa4c8f934829eb39524af505c9?apiKey=166a782ca6344aad902f23b81529b6b9&"
             altText="Budget"
             title={`Budget : ${getCurrentMonth()} ${getCurrentYear()}`}
-            value={dashboardData? `Rs. ${dashboardData.budget.budgetAmount}` : "No data"}
+            value={"No data"}
             viewText="View Detailed Statistic"
           />
           <Card
@@ -86,7 +86,7 @@ export default function Dashboard() {
             imageSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/cc25f37816e52a72aff5424df40072bae91c357c6930dae607d336deb2c7b50e?apiKey=166a782ca6344aad902f23b81529b6b9&"
             altText="Medicines Available"
             title="Medicines Available"
-            value={dashboardData? `Rs. ${dashboardData.inventory.medicinesInStock}` : "No data"}
+            value={dashboardData? `${dashboardData.inventory.medicinesInStock}` : "No data"}
             viewText="Visit Inventory"
           />
           <Card
@@ -95,7 +95,7 @@ export default function Dashboard() {
             imageSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/7d5e99b8a57a2b6420d6e98a536c93ae92a5f53b551554fa1920c86b1948f6d9?apiKey=166a782ca6344aad902f23b81529b6b9&"
             altText="Medicine Shortage"
             title="Medicine Shortage"
-            value={dashboardData? `Rs. ${dashboardData.inventory.medicineShortage}` : "No data"}
+            value={dashboardData? `${dashboardData.inventory.medicineShortage}` : "No data"}
             viewText="Resolve Now"
           />
         </section>
@@ -111,11 +111,11 @@ export default function Dashboard() {
             <div className="section-divider" />
             <div className="section-content">
               <div className="section-item">
-                <h3 className="section-value">{dashboardData? `Rs. ${dashboardData.inventory.medicinesInStock}` : "No data"}</h3>
+                <h3 className="section-value">{dashboardData? `${dashboardData.inventory.medicinesInStock}` : "No data"}</h3>
                 <p className="section-description">Total no of Medicines</p>
               </div>
               <div className="section-item">
-                <h3 className="section-value">{dashboardData? `Rs. ${dashboardData.illness.illnessNo}` : "No data"}</h3>
+                <h3 className="section-value">{"No data"}</h3>
                 <p className="section-description">Illnesses</p>
               </div>
             </div>
@@ -131,11 +131,11 @@ export default function Dashboard() {
             <div className="section-divider" />
             <div className="section-content">
               <div className="section-item">
-                <h3 className="section-value">{dashboardData? `Rs. ${dashboardData.quickReport.medicinesConsumed}` : "No data"}</h3>
+                <h3 className="section-value">{dashboardData? `${dashboardData.quickReport.medicinesConsumed}` : "No data"}</h3>
                 <p className="section-description">Medicines Consumed</p>
               </div>
               <div className="section-item">
-                <h3 className="section-value">{dashboardData? `Rs. ${dashboardData.quickReport.numberOfEntries}` : "No data"}</h3>
+                <h3 className="section-value">{dashboardData? `${dashboardData.quickReport.numberOfEntries}` : "No data"}</h3>
                 <p className="section-description">Number of Entries</p>
               </div>
             </div>
@@ -151,7 +151,7 @@ export default function Dashboard() {
             <div className="section-divider" />
             <div className="section-content">
               <div className="section-item">
-                <h3 className="section-value">{dashboardData? `Rs. ${dashboardData.myHospital.totalSuppliers}` : "No data"}</h3>
+                <h3 className="section-value">{dashboardData? `${dashboardData.myHospital.totalSuppliers}` : "No data"}</h3>
                 <p className="section-description">Total no of Suppliers</p>
               </div>
               <div className="section-item">
@@ -171,11 +171,11 @@ export default function Dashboard() {
             <div className="section-divider" />
             <div className="section-content">
               <div className="section-item">
-                <h3 className="section-value">{dashboardData? `Rs. ${dashboardData.patients.totalPatients}` : "No data"}</h3>
+                <h3 className="section-value">{dashboardData? `${dashboardData.patients.totalPatients}` : "No data"}</h3>
                 <p className="section-description">Total no of Patients</p>
               </div>
               <div className="section-item">
-                <h3 className="section-value">{dashboardData? `Rs. ${dashboardData.patients.mostUsedMedicine}` : "No data"}</h3>
+                <h3 className="section-value">{dashboardData? `${dashboardData.patients.mostUsedMedicine}` : "No data"}</h3>
                 <p className="section-description">Frequently used item</p>
               </div>
             </div>
