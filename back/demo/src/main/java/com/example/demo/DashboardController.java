@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import com.example.demo.Illness.IllnessDAO;
+import com.example.demo.Supplier.SupplierDAO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,14 +29,17 @@ public class DashboardController {
         dashboardSummary.put("quickReport", quickReportSummary);
 
         Map<String, Object> myHospitalSummary = new HashMap<>();
-        myHospitalSummary.put("totalSuppliers", 10);
+        myHospitalSummary.put("totalSuppliers", SupplierDAO.getCount());
         dashboardSummary.put("myHospital", myHospitalSummary);
 
         Map<String, Object> patientsSummary = new HashMap<>();
-        patientsSummary.put("totalPatients", 845);
+        patientsSummary.put("totalPatients", PatientDAO.getCount());
         patientsSummary.put("mostUsedMedicine", "Paracetamol");
         dashboardSummary.put("patients", patientsSummary);
 
+        Map<String, Object> illnessSummary = new HashMap<>();
+        illnessSummary.put("totalIllnesses", IllnessDAO.getCount());
+        dashboardSummary.put("illnesses", illnessSummary);
         return dashboardSummary;
     }
 }

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import './Inventory.css';
 
 function SearchBar() {
@@ -7,18 +8,6 @@ function SearchBar() {
         <div className="search-input-container">
           <input type="text" placeholder="Search Medicine Inventory.." className="search-input" />
           <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/3bf32ee1d2c19add8b4a5c84df63fc01d3fddfae65e52490b0e402e5b6b519e5?apiKey=92503cb420154d6c95f36ba59a7a554b&" alt="Search Icon" className="search-icon" />
-        </div>
-        <div className="filter-container">
-          <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/b3ddf882f375b2fc7b30ed0bbbd32629d0caa367a67ff5c07f9a372ed024ddbc?apiKey=92503cb420154d6c95f36ba59a7a554b&" alt="Filter Icon" className="filter-icon" />
-          <div className="filter-dropdown">
-            <select>
-              <option value="" disabled>- Select Group -</option>
-              <option value="group1">Group 1</option>
-              <option value="group2">Group 2</option>
-              <option value="group3">Group 3</option>
-            </select>
-            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/98736ab2312d7ab374c17ba36638289a09710f50958bbcbcbd15b24bcbd1197c?apiKey=92503cb420154d6c95f36ba59a7a554b&" alt="Dropdown Icon" className="dropdown-icon" />
-          </div>
         </div>
       </div>
     );
@@ -84,7 +73,58 @@ function Pagination() {
   );
 }
 
+function AddNewEntryPopup({ onClose }) {
+  const [formData, setFormData] = React.useState({ drugName: '', supplierName: '', quantity: '', date: '' });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = () => {
+    // Add functionality to handle form submission
+    console.log('Form submitted:', formData);
+    fetch('/drugentries/add', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to add entry');
+        }
+        // Add logic here if needed
+        console.log('Entry added successfully');
+        onClose(); // Close the popup after successful submission
+      })
+      .catch(error => {
+        console.error('Error adding entry:', error);
+        // Handle error scenario if needed
+      });
+  
+    onClose();
+  };
+
+  return (
+    <div className="popup-overlay">
+      <div className="add-new-entry-popup">
+        <button className="close-button" onClick={onClose}>X</button>
+        <h2>Add New Entry</h2>
+        <input type="text" name="drugName" placeholder="Drug Name" value={formData.drugName} onChange={handleChange} />
+        <input type="text" name="supplierName" placeholder="Supplier Name" value={formData.supplierName} onChange={handleChange} />
+        <input type="text" name="quantity" placeholder="Quantity" value={formData.quantity} onChange={handleChange} />
+        <input type="date" name="date" placeholder="Date" value={formData.date} onChange={handleChange} />
+        <button onClick={handleSubmit}>Add Entry</button>
+      </div>
+    </div>
+  );
+}
+
+
 export default function Inventory() {
+  const [showAddNewEntryPopup, setShowAddNewEntryPopup] = useState(false);
   const [listType, setListType] = React.useState('Medicines');
   const toggleListType = () => {
     setListType(prevType => prevType === 'Medicines' ? 'Illness Groups' : 'Medicines');
@@ -100,6 +140,10 @@ export default function Inventory() {
     { name: "Amoxyclav 625 Tablet", dosageForm: "D06ID232435455", illness: "Generic Medicine", stock: 150, id: "D06ID232435457" },
     { name: "Avil 25 Tablet", dosageForm: "D06ID232435455", illness: "Generic Medicine", stock: 270, id: "D06ID232435458" },
   ];
+
+  const handleAddNewEntryClick = () => {
+    setShowAddNewEntryPopup(true);
+  };
 
   return (
     <>
@@ -128,7 +172,7 @@ export default function Inventory() {
               <button className="toggle-button" onClick={toggleListType}>
                 {listType === 'Medicines' ? 'View Illness Groups' : 'View Medicines'}
               </button>
-              <button className="add-button">
+              <button className="add-button" onClick={handleAddNewEntryClick}>
                 {listType === 'Medicines' ? 'New Entry' : 'New Illness Group'}
               </button>
             </div>
@@ -138,6 +182,7 @@ export default function Inventory() {
           <Pagination />
         </section>
       </main>
+      {showAddNewEntryPopup && <AddNewEntryPopup onClose={() => setShowAddNewEntryPopup(false)} />}
     </>
   );
 }
