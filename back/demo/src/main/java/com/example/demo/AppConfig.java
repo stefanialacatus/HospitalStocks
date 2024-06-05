@@ -3,47 +3,27 @@ package com.example.demo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 @Configuration
 public class AppConfig {
-    private static final HikariDataSource dataSource;
 
-    static {
+    @Bean
+    public DataSource dataSource() {
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:mysql://localhost/my_DB");
-        config.setUsername("root");
-        config.setPassword("Tpassword1.");
+        config.setJdbcUrl("jdbc:postgresql://facultate-db.cv8ou2i408tg.eu-north-1.rds.amazonaws.com:5432/postgres");
+        config.setUsername("postgres");
+        config.setPassword("parolacomplicata11"); // Ensure this is the correct password
+        config.setDriverClassName("org.postgresql.Driver");
+        config.setMaximumPoolSize(10);
         config.setAutoCommit(false);
-        dataSource = new HikariDataSource(config);
+        return new HikariDataSource(config);
     }
 
-    public static Connection getConnection() throws SQLException {
-        return dataSource.getConnection();
-    }
-
-    public static void closeConnection(Connection connection) {
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                System.err.println(e);
-            }
-        }
-    }
-
-    public static void rollback(Connection connection) {
-        if (connection != null) {
-            try {
-                connection.rollback();
-            } catch (SQLException e) {
-                System.err.println(e);
-            }
-        }
+    @Bean
+    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
     }
 }
