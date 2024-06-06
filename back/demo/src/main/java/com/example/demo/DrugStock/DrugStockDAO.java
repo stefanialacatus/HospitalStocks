@@ -15,9 +15,11 @@ import java.util.HashMap;
 
 @Repository
 public class DrugStockDAO {
-
+    private static JdbcTemplate jdbcTemplate = null;
     @Autowired
-    private static JdbcTemplate jdbcTemplate;
+    public DrugStockDAO(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     public static Map<String, Map<String, Object>> drugsInPage(int pageNum) {
         Map<String, Map<String, Object>> drugsMap = new HashMap<>();
