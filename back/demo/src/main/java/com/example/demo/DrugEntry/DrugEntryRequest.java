@@ -6,15 +6,11 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Getter
 @Setter
+@Getter
 @Data
-public class DrugEntry {
-
-    private int drugId;
-    private int supplierId;
-    private String batchNumber;
+public class DrugEntryRequest {
+    private String drugName;
+    private String supplierName;
     private int quantity;
-    private LocalDate entryDate;
-    private int id;
 }

@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import com.zaxxer.hikari.HikariConfig;
@@ -8,6 +9,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import javax.sql.DataSource;
 
 @Configuration
+@ComponentScan("com.example.demo")
 public class AppConfig {
 
     @Bean
@@ -18,7 +20,7 @@ public class AppConfig {
         config.setPassword("parolacomplicata11"); // Ensure this is the correct password
         config.setDriverClassName("org.postgresql.Driver");
         config.setMaximumPoolSize(10);
-        config.setAutoCommit(false);
+        config.setAutoCommit(true);
         return new HikariDataSource(config);
     }
 
