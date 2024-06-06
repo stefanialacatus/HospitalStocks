@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useState } from 'react';
 import './Inventory.css';
 import { useState, useEffect } from 'react';
 
@@ -187,4 +186,3 @@ export default function Inventory() {
     </>
   );
 }
-export default Inventory;
