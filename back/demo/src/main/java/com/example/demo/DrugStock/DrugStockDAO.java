@@ -46,4 +46,9 @@ public class DrugStockDAO {
         });
         return drugsMap;
     }
+    public static String checkInventoryStatus() {
+        // Call the stored function to check inventory status
+        String sql = "SELECT check_inventory_status()";
+        return jdbcTemplate.queryForObject(sql, String.class);
+    }
 }
