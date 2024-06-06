@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Data
 public class DrugEntryRequest {
     private String drugName;
-    private String supplierName;
     private int quantity;
+    private String supplierName;
+
 }

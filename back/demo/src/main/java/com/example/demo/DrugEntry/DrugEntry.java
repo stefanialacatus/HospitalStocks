@@ -12,7 +12,7 @@ import java.time.LocalDate;
 public class DrugEntry {
 
     private int drugId;
-    private int supplierId;
+    private String supplierName;
     private String batchNumber;
     private int quantity;
     private LocalDate entryDate;

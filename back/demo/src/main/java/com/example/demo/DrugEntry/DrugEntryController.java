@@ -13,11 +13,11 @@ public class DrugEntryController {
 
     private static final Logger log = LoggerFactory.getLogger(DrugEntryController.class);
 
-    private final DrugEntryService drugEntryService;
+    private final DrugEntryDAO drugEntryDAO;
 
     @Autowired
-    public DrugEntryController(DrugEntryService drugEntryService) {
-        this.drugEntryService = drugEntryService;
+    public DrugEntryController(DrugEntryDAO drugEntryDAO) {
+        this.drugEntryDAO = drugEntryDAO;
     }
 
     @PostMapping("/addEntry")
@@ -27,7 +27,7 @@ public class DrugEntryController {
         System.out.println("DrugEntry: " + drugEntry);
 
         try {
-            drugEntryService.addDrugEntry(drugEntry, request.getDrugName(), request.getSupplierName());
+            drugEntryDAO.addDrugEntry(drugEntry, request.getDrugName(), request.getSupplierName());
             System.out.println("Entry added successfully");
             return ResponseEntity.ok("Entry added successfully");
         } catch (IllegalArgumentException e) {
