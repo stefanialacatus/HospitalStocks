@@ -1,6 +1,8 @@
 package com.example.demo;
 
+import com.example.demo.DrugStock.DrugStockDAO;
 import com.example.demo.Illness.IllnessDAO;
+import com.example.demo.Patient.PatientDAO;
 import com.example.demo.Supplier.SupplierDAO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +20,7 @@ public class DashboardController {
         Map<String, Object> dashboardSummary = new HashMap<>();
 
         Map<String, Object> inventorySummary = new HashMap<>();
-        inventorySummary.put("status", "Good");
+        inventorySummary.put("status", DrugStockDAO.checkInventoryStatus());
         inventorySummary.put("medicinesInStock", 152);
         inventorySummary.put("medicineShortage", "False");
         dashboardSummary.put("inventory", inventorySummary);
