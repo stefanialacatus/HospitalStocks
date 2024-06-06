@@ -141,7 +141,7 @@ export default function Dashboard() {
             <div className="section-header">
               <h2 className="section-title">My Hospital</h2>
               <div className="section-actions">
-                <span className="section-action-text"><a href="#" className="link-text">Go to Hospital page</a></span>
+                <span className="section-action-text"><a href="/myhospital" className="link-text">Go to Hospital page</a></span>
                 <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/0d707919ce2949ab78f4afc7d7275155614906edba94e9e1a55216280ff9e2cc?apiKey=166a782ca6344aad902f23b81529b6b9&" alt="" className="section-action-icon" />
               </div>
             </div>
