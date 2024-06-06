@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.Illness.IllnessDAO;
+import com.example.demo.Patient.PatientDAO;
 import com.example.demo.Supplier.SupplierDAO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
