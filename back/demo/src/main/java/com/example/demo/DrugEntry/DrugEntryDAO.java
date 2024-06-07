@@ -24,14 +24,10 @@ public class DrugEntryDAO {
         if (drugEntry == null) {
             throw new IllegalArgumentException("DrugEntry cannot be null");
         }
-
-        // Get the drugId using the drug name
         int drugId = getDrugIdByName(drugName);
         drugEntry.setDrugId(drugId);
 
         drugEntry.setSupplierName(supplierName);
-
-        // Insert the DrugEntry into the database
         insertDrugEntry(drugEntry);
     }
 
