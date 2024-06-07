@@ -25,9 +25,6 @@ function MedicineListItem({ name, dosageForm, illness, stock, id, cost }) {
             <td>{dosageForm}</td>
             <td>{illness}</td>
             <td>{stock}</td>
-            <td>
-                {cost}
-            </td>
         </tr>
     );
 }
@@ -41,7 +38,6 @@ function MedicinesTable({ medicines }) {
                     <th>Dosage Form</th>
                     <th>Illness</th>
                     <th>Stock in Qty</th>
-                    <th>Full Cost</th>
                 </tr>
             </thead>
             <tbody>

@@ -88,5 +88,14 @@ public class PatientDAO {
             e.printStackTrace();
         }
     }
+    public void deletePatient(String firstName, String lastName) {
+        String sql = "SELECT delete_patient(?, ?)";
+        jdbcTemplate.execute(sql, (PreparedStatementCallback<Void>) ps -> {
+            ps.setString(1, firstName);
+            ps.setString(2, lastName);
+            ps.execute();
+            return null;
+        });
+    }
 
 }

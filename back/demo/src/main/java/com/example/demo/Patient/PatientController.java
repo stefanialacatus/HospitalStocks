@@ -35,4 +35,10 @@ public class PatientController {
             return new ResponseEntity<>("Error adding patient: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @DeleteMapping("/deletePatient/{firstName}/{lastName}")
+    public ResponseEntity<String> deletePatient(@PathVariable String firstName, @PathVariable String lastName) {
+        patientsDAO.deletePatient(firstName, lastName);
+        return new ResponseEntity<>("Patient deleted successfully", HttpStatus.OK);
+    }
+
 }
