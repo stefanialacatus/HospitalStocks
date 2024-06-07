@@ -19,8 +19,13 @@ function Card({ borderColor, bgColor, imageSrc, title, value, description, viewT
 }
 
 export default function Dashboard() {
-
+  const months = ['March', 'April', 'May', 'June'];
   const [dashboardData, setDashboardData] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 3);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const handleMonthChange = (event) => {
+    setSelectedMonth(parseInt(event.target.value));
+  };
 
   useEffect(() => {
     fetch("http://localhost:8080/dashboard/summary")
@@ -121,10 +126,11 @@ export default function Dashboard() {
           <article className="section">
             <div className="section-header">
               <h2 className="section-title">Quick Report</h2>
-              <div className="section-actions">
-                <span className="section-action-text">{getCurrentMonth()} {getCurrentYear()}</span>
-                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/57c9dc11e65aa7ca10e40536198477735aa6783a5c6b26a8719815fc6b83eab2?apiKey=166a782ca6344aad902f23b81529b6b9&" alt="Report Date" className="section-action-icon" />
-              </div>
+              <select className="date-drop" value={selectedMonth} onChange={handleMonthChange}>
+                {months.map((month, index) => (
+                  <option key={index} value={index + 3}>{`${month} ${selectedYear}`}</option>
+                ))}
+              </select>
             </div>
             <div className="section-divider" />
             <div className="section-content">
@@ -142,8 +148,7 @@ export default function Dashboard() {
             <div className="section-header">
               <h2 className="section-title">My Hospital</h2>
               <div className="section-actions">
-                <span className="section-action-text"><a href="/myhospital" className="link-text">Go to Hospital page</a></span>
-                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/0d707919ce2949ab78f4afc7d7275155614906edba94e9e1a55216280ff9e2cc?apiKey=166a782ca6344aad902f23b81529b6b9&" alt="" className="section-action-icon" />
+                <span className="section-action-text">Spitalul Sf. Maria, Iasi</span>
               </div>
             </div>
             <div className="section-divider" />

@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.DrugStock.DrugStockDAO;
+import com.example.demo.Drugs.DrugDAO;
 import com.example.demo.Illness.IllnessDAO;
 import com.example.demo.Patient.PatientDAO;
 import com.example.demo.Supplier.SupplierDAO;
@@ -21,7 +22,7 @@ public class DashboardController {
 
         Map<String, Object> inventorySummary = new HashMap<>();
         inventorySummary.put("status", DrugStockDAO.checkInventoryStatus());
-        inventorySummary.put("medicinesInStock", DrugStockDAO.checkMedicinesInStock());
+        inventorySummary.put("medicinesInStock", DrugDAO.getMedicinesAvailable());
         inventorySummary.put("medicineShortage", "False");
         dashboardSummary.put("inventory", inventorySummary);
 
@@ -34,7 +35,6 @@ public class DashboardController {
         myHospitalSummary.put("totalSuppliers", SupplierDAO.getCount());
         myHospitalSummary.put("budget", DrugStockDAO.getBudget());
         dashboardSummary.put("myHospital", myHospitalSummary);
-
 
         Map<String, Object> patientsSummary = new HashMap<>();
         patientsSummary.put("totalPatients", PatientDAO.getCount());

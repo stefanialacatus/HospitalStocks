@@ -53,22 +53,20 @@ public class DrugStockDAO {
         String sql = "SELECT check_inventory_status()";
         return jdbcTemplate.queryForObject(sql, String.class);
     }
-    public static int getBudget() {
-        // Call the stored function to get the budget
-        String sql = "select budget from hospital_info";
-        return jdbcTemplate.queryForObject(sql, Integer.class);
-    }
-    public static int checkMedicinesInStock(){
-        // Call the stored function to check the number of medicines in stock
-        String sql = "SELECT drugs_in_stock()";
+
+    public static int getMedicinesConsumed(){
+        String sql = "SELECT total_medicines_consumed(CURRENT_DATE)";
         return jdbcTemplate.queryForObject(sql, Integer.class);
     }
     public static int getNumberOfEntries(){
         String sql = "SELECT calculate_medicines_added(CURRENT_DATE)";
         return jdbcTemplate.queryForObject(sql, Integer.class);
     }
-    public static int getMedicinesConsumed(){
-        String sql = "SELECT total_medicines_consumed(CURRENT_DATE)";
+
+    public static int getBudget() {
+        // Call the stored function to get the budget
+        String sql = "select budget from hospital_info";
         return jdbcTemplate.queryForObject(sql, Integer.class);
     }
+
 }
