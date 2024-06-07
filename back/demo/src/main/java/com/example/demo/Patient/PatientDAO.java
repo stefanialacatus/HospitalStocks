@@ -52,4 +52,8 @@ public class PatientDAO {
         String sql = "SELECT COUNT(*) FROM Patients";
         return jdbcTemplate.queryForObject(sql, Integer.class);
     }
+    public static String getMostUsedMedicine(){
+        String sql = "SELECT name from drugs where id = (select get_most_consumed_drug(CURRENT_DATE))";
+        return jdbcTemplate.queryForObject(sql, String.class);
+    }
 }

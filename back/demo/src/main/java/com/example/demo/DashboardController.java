@@ -27,17 +27,18 @@ public class DashboardController {
         dashboardSummary.put("inventory", inventorySummary);
 
         Map<String, Object> quickReportSummary = new HashMap<>();
-        quickReportSummary.put("medicinesConsumed", 1856);
-        quickReportSummary.put("numberOfEntries", 5288);
+        quickReportSummary.put("medicinesConsumed", DrugStockDAO.getMedicinesConsumed());
+        quickReportSummary.put("numberOfEntries", DrugStockDAO.getNumberOfEntries());
         dashboardSummary.put("quickReport", quickReportSummary);
 
         Map<String, Object> myHospitalSummary = new HashMap<>();
         myHospitalSummary.put("totalSuppliers", SupplierDAO.getCount());
+        myHospitalSummary.put("budget", DrugStockDAO.getBudget());
         dashboardSummary.put("myHospital", myHospitalSummary);
 
         Map<String, Object> patientsSummary = new HashMap<>();
         patientsSummary.put("totalPatients", PatientDAO.getCount());
-        patientsSummary.put("mostUsedMedicine", "Paracetamol");
+        patientsSummary.put("mostUsedMedicine", PatientDAO.getMostUsedMedicine());
         dashboardSummary.put("patients", patientsSummary);
 
         Map<String, Object> illnessSummary = new HashMap<>();

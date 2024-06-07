@@ -56,7 +56,20 @@ public class DrugDAO {
         return jdbcTemplate.queryForObject(sql, Integer.class);
     }
     public static int getMedicinesAvailable() {
-        String sql = "SELECT COUNT(*) FROM drugs where stock >= 0";
+        String sql = "SELECT COUNT(*) FROM drugs where stock > 0";
         return jdbcTemplate.queryForObject(sql, Integer.class);
+    }
+    public static List<Drugs> getDrugsInPage(int page) {
+        // Call the stored procedure or function to get drugs for the given page number
+        String sql = "SELECT * FROM get_drugs_info_in_page_table(?)";
+        return jdbcTemplate.query(sql, new Object[]{page}, (rs, rowNum) -> {
+            Drugs drug = new Drugs();
+            drug.setName(rs.getString("drug_name"));
+            drug.setDosageForm(rs.getString("dosage_form"));
+            drug.setIllness(rs.getString("illness"));
+            drug.setStock(rs.getInt("stock"));
+            System.out.println("the info:" + drug);
+            return drug;
+        });
     }
 }
