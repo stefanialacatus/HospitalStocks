@@ -1,5 +1,11 @@
 import * as React from 'react';
 import './Patients.css';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const itemsPerPage = 8;
+const totalPatients = 163;
+const totalPages = Math.ceil(totalPatients / itemsPerPage);
 
 function SearchBar() {
     return (
@@ -12,10 +18,8 @@ function SearchBar() {
     );
 }
 
-function PatientList({ firstName, lastName, illness, id }) {
+function PatientList({ firstName, lastName, illness_name, id }) {
     const [showRemoveModal, setShowRemoveModal] = React.useState(false);
-    const [showAddModal, setShowAddModal] = React.useState(false);
-    const [newPatientData, setNewPatientData] = React.useState({ firstName: "", lastName: "", illness: "" });
 
     const openRemoveModal = () => {
         setShowRemoveModal(true);
@@ -25,37 +29,17 @@ function PatientList({ firstName, lastName, illness, id }) {
         setShowRemoveModal(false);
     };
 
-    const openAddModal = () => {
-        setShowAddModal(true);
-    };
-
-    const closeAddModal = () => {
-        setShowAddModal(false);
-    };
-
     const handleRemovePatient = () => {
         // Functionality to remove the patient
         console.log(`Removing patient ${id}`);
         setShowRemoveModal(false);
     };
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setNewPatientData({ ...newPatientData, [name]: value });
-    };
-
-    const handleAddPatient = () => {
-        // Functionality to add the patient
-        console.log("Adding new patient:", newPatientData);
-        setShowAddModal(false);
-        setNewPatientData({ firstName: "", lastName: "", illness: "" }); // Clear input fields
-    };
-
     return (
         <tr className="medicine-list-item">
             <td>{firstName}</td>
             <td>{lastName}</td>
-            <td>{illness}</td>
+            <td>{illness_name}</td>
             <td className="view-details">
                 <span onClick={openRemoveModal}>Remove Patient</span>
                 <img
@@ -71,18 +55,6 @@ function PatientList({ firstName, lastName, illness, id }) {
                             <p>Please confirm removing patient:</p>
                             <p>{`${firstName} ${lastName}`}</p>
                             <button onClick={handleRemovePatient}>Remove Patient</button>
-                        </div>
-                    </div>
-                )}
-                {showAddModal && (
-                    <div className="modal">
-                        <div className="modal-content">
-                            <span className="close" onClick={closeAddModal}>&times;</span>
-                            <h2>Add New Patient</h2>
-                            <input type="text" name="firstName" placeholder="First Name" value={newPatientData.firstName} onChange={handleChange} />
-                            <input type="text" name="lastName" placeholder="Last Name" value={newPatientData.lastName} onChange={handleChange} />
-                            <input type="text" name="illness" placeholder="Illness" value={newPatientData.illness} onChange={handleChange} />
-                            <button onClick={handleAddPatient}>Add Patient</button>
                         </div>
                     </div>
                 )}
@@ -111,32 +83,89 @@ function PatientsTable({ patients }) {
     );
 }
 
-function Pagination() {
+function Pagination({ currentPage, totalPages, onNextPage, onPreviousPage }) {
+    const startItem = (currentPage - 1) * itemsPerPage + 1;
+    const endItem = Math.min(currentPage * itemsPerPage, totalPatients);
     return (
         <div className="pagination-container">
-            <span>Showing 1 - 8 results of 298</span>
+            <span>Showing {startItem} - {endItem} results of {totalPatients}</span>
             <div className="pagination-controls">
-                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/9c5603b1ade53a12461fcc579f39c2e84d89bb535241d15a38ce46cac6ef1981?apiKey=92503cb420154d6c95f36ba59a7a554b&" alt="Previous Page" className="pagination-icon" />
-                <span>Page 01</span>
-                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/57c9dc11e65aa7ca10e40536198477735aa6783a5c6b26a8719815fc6b83eab2?apiKey=92503cb420154d6c95f36ba59a7a554b&" alt="Next Page" className="pagination-icon" />
-                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/73a4e29bb1c974471e9660a44354779d6ed7bceb50229ce1628cc2ba4ef68621?apiKey=92503cb420154d6c95f36ba59a7a554b&" alt="Last Page" className="pagination-icon" />
+                <button onClick={onPreviousPage} disabled={currentPage === 1}>
+                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/9c5603b1ade53a12461fcc579f39c2e84d89bb535241d15a38ce46cac6ef1981?apiKey=92503cb420154d6c95f36ba59a7a554b&" alt="Previous Page" className="pagination-icon" />
+                </button>
+                <span>Page {currentPage < 10 ? `${currentPage}` : currentPage}</span>
+                <button onClick={onNextPage} disabled={currentPage === totalPages}>
+                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/73a4e29bb1c974471e9660a44354779d6ed7bceb50229ce1628cc2ba4ef68621?apiKey=92503cb420154d6c95f36ba59a7a554b&" alt="Next Page" className="pagination-icon" />
+                </button>
             </div>
         </div>
     );
 }
 
 export default function Patients() {
-    const [patients, setPatients] = React.useState([
-        { firstName: "John", lastName: "Doe", illness: "Generic Illness", id: "P001" },
-        { firstName: "Jane", lastName: "Doe", illness: "Diabetes", id: "P002" },
-        { firstName: "Alice", lastName: "Smith", illness: "Generic Illness", id: "P003" },
-        { firstName: "Bob", lastName: "Johnson", illness: "Hypertension", id: "P004" }
-    ]);
-
-    const [showAddModal, setShowAddModal] = React.useState(false);
+    const [patients, setPatients] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [newPatient, setNewPatient] = useState({
+        firstName: "",
+        lastName: "",
+        illness: ""
+    });
 
     const closeAddModal = () => {
         setShowAddModal(false);
+    };
+
+    const openAddModal = () => {
+        setShowAddModal(true);
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewPatient({ ...newPatient, [name]: value });
+    };
+
+    const handleAddPatient = (e) => {
+        e.preventDefault();
+        const requestPayload = {
+            firstName: newPatient.firstName,
+            lastName: newPatient.lastName,
+            illnessName: newPatient.illness,
+        };
+        console.log('Submitting payload:', requestPayload);
+
+        axios.post('http://localhost:8080/patients/addPatient', requestPayload)
+            .then((response) => {
+                alert('Patient added successfully');
+                closeAddModal();
+                fetchData(currentPage); // Refresh the list after adding a patient
+            })
+            .catch((error) => {
+                console.error('Error adding patient:', error);
+                alert('Failed to add patient');
+            });
+    };
+
+    const fetchData = async (page) => {
+        try {
+            const response = await axios.get(`http://localhost:8080/patients/getPatientsInPage?page=${page}`);
+            setPatients(response.data);
+            console.log('Data fetched:', response.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchData(currentPage);
+    }, [currentPage]);
+
+    const handleNextPage = () => {
+        setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+    };
+
+    const handlePreviousPage = () => {
+        setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
     };
 
     return (
@@ -162,23 +191,28 @@ export default function Patients() {
                             <span className="subtitle">{` > List of Patients`}</span>
                         </h1>
                         <div className="buttons">
-                            <button className="add-button" onClick={() => setShowAddModal(true)}>
+                            <button className="add-button" onClick={openAddModal}>
                                 Add Patient
                             </button>
                         </div>
                     </div>
                     <PatientsTable patients={patients} />
-                    <Pagination />
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onNextPage={handleNextPage}
+                        onPreviousPage={handlePreviousPage}
+                    />
                 </section>
                 {showAddModal && (
                     <div className="modal">
                         <div className="modal-content">
                             <span className="close" onClick={closeAddModal}>×</span>
                             <h2>Add New Patient</h2>
-                            <input type="text" name="firstName" placeholder="First Name" />
-                            <input type="text" name="lastName" placeholder="Last Name" />
-                            <input type="text" name="illness" placeholder="Illness" />
-                            <button>Add Patient</button>
+                            <input type="text" name="firstName" placeholder="First Name" value={newPatient.firstName} onChange={handleInputChange} />
+                            <input type="text" name="lastName" placeholder="Last Name" value={newPatient.lastName} onChange={handleInputChange} />
+                            <input type="text" name="illness" placeholder="Illness" value={newPatient.illness} onChange={handleInputChange} />
+                            <button onClick={handleAddPatient}>Add Patient</button>
                         </div>
                     </div>
                 )}

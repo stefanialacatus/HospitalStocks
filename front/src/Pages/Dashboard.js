@@ -71,7 +71,7 @@ export default function Dashboard() {
             altText="Good Inventory Status"
             title="Inventory Status"
             value={dashboardData ? `${dashboardData.inventory.status}` : "No data"}
-            viewText="View Detailed Statistic"
+            viewText={<a href="/statistics">View Detailed Statistic</a>}
           />
           <Card
             borderColor="rgba(254, 214, 0, 1)"
@@ -80,7 +80,7 @@ export default function Dashboard() {
             altText="Budget"
             title={`Budget : ${getCurrentMonth()} ${getCurrentYear()}`}
             value={dashboardData ? `${dashboardData.myHospital.budget}` : "No data"}
-            viewText="View Detailed Statistic"
+            viewText={<a href="/inventory">View Details</a>}
           />
           <Card
             borderColor="rgba(3, 169, 245, 1)"
@@ -99,7 +99,7 @@ export default function Dashboard() {
             altText="Medicine Shortage"
             title="Medicine Shortage"
             value={dashboardData? `${dashboardData.inventory.medicineShortage}` : "No data"}
-            viewText="Resolve Now"
+            viewText={<a href="/statistics">View Detailed Statistic</a>}
           />
         </section>
         <section className="sections">
