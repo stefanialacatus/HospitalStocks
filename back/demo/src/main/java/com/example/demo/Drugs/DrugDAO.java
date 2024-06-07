@@ -55,4 +55,8 @@ public class DrugDAO {
         String sql = "SELECT COUNT(*) FROM drugs";
         return jdbcTemplate.queryForObject(sql, Integer.class);
     }
+    public static int getMedicinesAvailable() {
+        String sql = "SELECT COUNT(*) FROM drugs where stock >= 0";
+        return jdbcTemplate.queryForObject(sql, Integer.class);
+    }
 }
