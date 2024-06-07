@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
+
 @RestController
 @RequestMapping
 public class DrugEntryController {
@@ -33,6 +35,9 @@ public class DrugEntryController {
         } catch (IllegalArgumentException e) {
             log.error("Error adding entry: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (SQLException e) {
+            log.error("An unexpected SQL error occurred while adding entry", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while adding the entry");
         } catch (Exception e) {
             log.error("An unexpected error occurred while adding entry", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while adding the entry");

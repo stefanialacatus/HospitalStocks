@@ -80,7 +80,7 @@ function Pagination({ currentPage, totalPages, onNextPage, onPreviousPage }) {
 
 function AddNewEntryPopup({ onClose }) {
     const [formData, setFormData] = React.useState({ drugName: '', supplierName: '', quantity: ''});
-
+    const [error, setError] = useState('');
     const handleInput = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -101,9 +101,15 @@ function AddNewEntryPopup({ onClose }) {
                 onClose(); // Close the popup after successful submission
             })
             .catch((error) => {
-                console.error('Error adding entry:', error);
-                alert('Failed to add entry');
-            });
+              console.error('Error adding entry:', error);
+              if (error.response && error.response.data) {
+                  setError(error.response.data); 
+                  alert('Insufficient budget. The entry failed.');
+              } else {
+                  setError('Failed to add entry'); // Default error message
+                  alert(error.response.data);
+              }
+          });
     };
     
 

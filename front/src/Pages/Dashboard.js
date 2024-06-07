@@ -20,7 +20,7 @@ function Card({ borderColor, bgColor, imageSrc, title, value, description, viewT
 }
 
 export default function Dashboard() {
-  const months = ['June', 'May', 'April', 'March'];
+  const months = ['June', 'May', 'April', 'Marchz'];
   const [dashboardData, setDashboardData] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 3);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
