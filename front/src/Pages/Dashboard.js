@@ -78,7 +78,7 @@ export default function Dashboard() {
             imageSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/7aec50645de34d85a4de3ccc837680bef90c56fa4c8f934829eb39524af505c9?apiKey=166a782ca6344aad902f23b81529b6b9&"
             altText="Budget"
             title={`Budget : ${getCurrentMonth()} ${getCurrentYear()}`}
-            value={"No data"}
+            value={dashboardData ? `${dashboardData.myHospital.budget}` : "No data"}
             viewText="View Detailed Statistic"
           />
           <Card
