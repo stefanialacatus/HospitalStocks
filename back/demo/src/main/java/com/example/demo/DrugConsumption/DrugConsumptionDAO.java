@@ -4,9 +4,11 @@ import com.example.demo.DrugEntry.DrugEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCallback;
+import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
 
+@Component
 public class DrugConsumptionDAO {
     private final JdbcTemplate jdbcTemplate;
 
