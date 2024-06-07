@@ -145,7 +145,7 @@ function ConsumptionPopup({ onClose }) {
               console.error('Error adding consumption:', error);
               if (error.response && error.response.data) {
                   setError(error.response.data); 
-                  alert('Insufficient budget. The entry failed.');
+                  alert('Error??');
               } else {
                   setError('Failed to add consumption'); // Default error message
                   alert(error.response.data);

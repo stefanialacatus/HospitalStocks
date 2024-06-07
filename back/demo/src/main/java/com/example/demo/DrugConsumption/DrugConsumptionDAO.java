@@ -27,7 +27,7 @@ public class DrugConsumptionDAO {
 
     void insertDrugConsumption(DrugConsumption drugConsumption) throws SQLException {
         System.out.println("In insert service : DrugConsumption: " + drugConsumption);
-        String sql = "SELECT consume_drug_stock(?, ?, ?)";
+        String sql = "SELECT consume_drug_stock(?, ?)";
         jdbcTemplate.execute(sql, (PreparedStatementCallback<Void>) ps -> {
             ps.setInt(1, drugConsumption.getDrugId());
             ps.setInt(2, drugConsumption.getQuantity());

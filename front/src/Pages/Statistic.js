@@ -47,7 +47,7 @@ function Pagination({ currentPage, totalPages, onNextPage, onPreviousPage }) {
     const endItem = Math.min(currentPage * itemsPerPage, totalMedicines);
     return (
         <div className="pagination-container">
-            <span>Showing {startItem} - {endItem} results of {totalMedicines}</span>
+            <span>Showing {startItem} - {endItem}</span>
             <div className="pagination-controls">
                 <button onClick={onPreviousPage} disabled={currentPage === 1}>
                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/9c5603b1ade53a12461fcc579f39c2e84d89bb535241d15a38ce46cac6ef1981?apiKey=92503cb420154d6c95f36ba59a7a554b&" alt="Previous Page" className="pagination-icon" />
