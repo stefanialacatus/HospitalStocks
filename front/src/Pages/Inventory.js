@@ -18,20 +18,15 @@ function SearchBar() {
     );
 }
 
-function MedicineListItem({ name, dosageForm, illness, stock, id }) {
+function MedicineListItem({ name, dosageForm, illness, stock, id, cost }) {
     return (
         <tr className="medicine-list-item">
             <td>{name}</td>
             <td>{dosageForm}</td>
             <td>{illness}</td>
             <td>{stock}</td>
-            <td className="view-details">
-                <span>View Full Detail</span>
-                <img
-                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/756c414269a215514297154b085d87a50de4ddb17649baf6c9a306c311aeb3fd?apiKey=92503cb420154d6c95f36ba59a7a554b&"
-                    alt="Detail Icon"
-                    className="detail-icon"
-                />
+            <td>
+                {cost}
             </td>
         </tr>
     );
@@ -46,7 +41,7 @@ function MedicinesTable({ medicines }) {
                     <th>Dosage Form</th>
                     <th>Illness</th>
                     <th>Stock in Qty</th>
-                    <th>Action</th>
+                    <th>Full Cost</th>
                 </tr>
             </thead>
             <tbody>
@@ -201,9 +196,6 @@ export default function Inventory() {
                             <span className="subtitle">{` > List of ${listType}`}</span>
                         </h1>
                         <div className="buttons">
-                            <button className="toggle-button" onClick={toggleListType}>
-                                {listType === 'Medicines' ? 'View Illness Groups' : 'View Medicines'}
-                            </button>
                             <button className="add-button" onClick={handleAddNewEntryClick}>
                                 {listType === 'Medicines' ? 'New Entry' : 'New Illness Group'}
                             </button>
