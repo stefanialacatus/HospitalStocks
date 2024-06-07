@@ -1,4 +1,5 @@
 import * as React from "react";
+import axios from 'axios';
 import { useEffect, useState } from "react";
 import style from './Dashboard.css';
 
@@ -19,28 +20,53 @@ function Card({ borderColor, bgColor, imageSrc, title, value, description, viewT
 }
 
 export default function Dashboard() {
-  const months = ['March', 'April', 'May', 'June'];
+  const months = ['June', 'May', 'April', 'March'];
   const [dashboardData, setDashboardData] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 3);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  
   const handleMonthChange = (event) => {
-    setSelectedMonth(parseInt(event.target.value));
+    const { value } = event.target;
+    const selectedMonthIndex = parseInt(value);
+    setSelectedMonth(selectedMonthIndex);
+    const selectedMonth = months[event.target.value - 3];
+    fetchQuickReport(selectedMonth);
   };
-
+  
+  const fetchQuickReport = async (month) => {
+    try {
+      const response = await axios.get(`http://localhost:8080/drugstock/getQuickReport?month=${month}`);
+      setDashboardData(prevData => ({
+        ...prevData,
+        quickReport: {
+          medicinesConsumed: response.data.medicinesConsumed,
+          numberOfEntries: response.data.numberOfEntries
+        }
+      }));
+      console.log('Data fetched:', response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+  
   useEffect(() => {
     fetch("http://localhost:8080/dashboard/summary")
       .then(response => response.json())
       .then(data => setDashboardData(data))
       .catch(error => console.error("Error fetching dashboard data:", error));
   }, []); // Run only once on component mount  
-  console.log(dashboardData);
-  const getCurrentMonth = () => {
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    return months[new Date().getMonth()];
-  };
-  const getCurrentYear = () => {
-    return new Date().getFullYear();
-  };
+
+  // Conditional rendering or default values
+  const inventoryStatus = dashboardData?.inventory?.status || "No data";
+  const myHospitalBudget = dashboardData?.myHospital?.budget || "No data";
+  const medicinesInStock = dashboardData?.inventory?.medicinesInStock || "No data";
+  const medicineShortage = dashboardData?.inventory?.medicineShortage || "No data";
+  const totalIllnesses = dashboardData?.illnesses?.totalIllnesses || "No data";
+  const totalPatients = dashboardData?.patients?.totalPatients || "No data";
+  const mostUsedMedicine = dashboardData?.patients?.mostUsedMedicine || "No data";
+  const medicinesConsumed = dashboardData?.quickReport?.medicinesConsumed || "No data";
+  const numberOfEntries = dashboardData?.quickReport?.numberOfEntries || "No data";
+
 
   return (
     <>
@@ -51,11 +77,6 @@ export default function Dashboard() {
             <div className="header-name">Stockspital</div>
           </div>
           <div className="header-center">Spital Sf. Maria</div>
-          <div className="header-right">
-            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/7e038ee69d5e007292339b72556c5ec5e57b20ff249d1a7e300aae51ba5b3bf2?apiKey=166a782ca6344aad902f23b81529b6b9&" alt="Notifications" className="header-notification-icon" />
-            <div className="header-notification-text">Notifications</div>
-            <div className="header-notification-count">01</div>
-          </div>
         </div>
       </header>
       <main className="main">
@@ -78,7 +99,7 @@ export default function Dashboard() {
             bgColor="rgba(254, 214, 0, 0.3)"
             imageSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/7aec50645de34d85a4de3ccc837680bef90c56fa4c8f934829eb39524af505c9?apiKey=166a782ca6344aad902f23b81529b6b9&"
             altText="Budget"
-            title={`Budget : ${getCurrentMonth()} ${getCurrentYear()}`}
+            title={`Budget : June 2024`}
             value={dashboardData ? `${dashboardData.myHospital.budget}` : "No data"}
             viewText={<a href="/inventory">View Details</a>}
           />

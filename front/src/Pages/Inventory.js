@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const itemsPerPage = 8;
-const totalMedicines = 152; 
+const totalMedicines = 24; 
 const totalPages = Math.ceil(totalMedicines / itemsPerPage); 
 
 function SearchBar() {
@@ -80,7 +80,7 @@ function Pagination({ currentPage, totalPages, onNextPage, onPreviousPage }) {
 
 function AddNewEntryPopup({ onClose }) {
     const [formData, setFormData] = React.useState({ drugName: '', supplierName: '', quantity: ''});
-
+    const [error, setError] = useState('');
     const handleInput = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -101,9 +101,15 @@ function AddNewEntryPopup({ onClose }) {
                 onClose(); // Close the popup after successful submission
             })
             .catch((error) => {
-                console.error('Error adding entry:', error);
-                alert('Failed to add entry');
-            });
+              console.error('Error adding entry:', error);
+              if (error.response && error.response.data) {
+                  setError(error.response.data); 
+                  alert('Insufficient budget. The entry failed.');
+              } else {
+                  setError('Failed to add entry'); // Default error message
+                  alert(error.response.data);
+              }
+          });
     };
     
 
@@ -185,11 +191,6 @@ export default function Inventory() {
                         <div className="header-name">Stockspital</div>
                     </div>
                     <div className="header-center">Spital Sf. Maria</div>
-                    <div className="header-right">
-                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/7e038ee69d5e007292339b72556c5ec5e57b20ff249d1a7e300aae51ba5b3bf2?apiKey=166a782ca6344aad902f23b81529b6b9&" alt="Notifications" className="header-notification-icon" />
-                        <div className="header-notification-text">Notifications</div>
-                        <div className="header-notification-count">01</div>
-                    </div>
                 </div>
             </header>
             <main className="main-cont">

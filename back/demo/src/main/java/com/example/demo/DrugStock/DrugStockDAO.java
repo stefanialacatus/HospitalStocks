@@ -62,6 +62,15 @@ public class DrugStockDAO {
         String sql = "SELECT calculate_medicines_added(CURRENT_DATE)";
         return jdbcTemplate.queryForObject(sql, Integer.class);
     }
+    public static int getNumberOfEntries(String month){
+        String sql = "SELECT COALESCE(calculate_medicines_added(TO_DATE(?|| ' 2024', 'Month YYYY')), 0)";
+        return jdbcTemplate.queryForObject(sql, Integer.class,month);
+    }
+    public static int getMedicinesConsumed(String month) {
+        String sql = "SELECT COALESCE(total_medicines_consumed(TO_DATE(? || ' 2024', 'Month YYYY')), 0)";
+        return jdbcTemplate.queryForObject(sql, Integer.class, month);
+    }
+
 
     public static int getBudget() {
         // Call the stored function to get the budget
