@@ -24,6 +24,7 @@ public class DrugController {
 
     @GetMapping("/findByName")
     public List<Drugs> searchDrugsByName(@RequestParam("name") String name) {
+
         return DrugDAO.findByName(name);
     }
 

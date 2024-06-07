@@ -1,18 +1,54 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Inventory.css';
-import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const itemsPerPage = 8;
 const totalMedicines = 24; 
 const totalPages = Math.ceil(totalMedicines / itemsPerPage); 
 
-function SearchBar() {
+function SearchBar({ setMedicines }) {
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
+
+    const handleSearch = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/drugs/findByName?name=${searchQuery}`);
+            if (!response.ok) {
+                throw new Error("Failed to fetch search results");
+            }
+            const data = await response.json();
+            setMedicines(data);
+        } catch (error) {
+            console.error("Error searching drugs:", error);
+        }
+    };
+
+    const handleChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
+
     return (
         <div className="search-bar-container">
             <div className="search-input-container">
-                <input type="text" placeholder="Search Medicine Inventory.." className="search-input" />
-                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/3bf32ee1d2c19add8b4a5c84df63fc01d3fddfae65e52490b0e402e5b6b519e5?apiKey=92503cb420154d6c95f36ba59a7a554b&" alt="Search Icon" className="search-icon" />
+                <input
+                    type="text"
+                    placeholder="Search Medicine Inventory.."
+                    className="search-input"
+                    value={searchQuery}
+                    onChange={handleChange}
+                />
+                <button onClick={handleSearch}>
+                    <img
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/3bf32ee1d2c19add8b4a5c84df63fc01d3fddfae65e52490b0e402e5b6b519e5?apiKey=92503cb420154d6c95f36ba59a7a554b&"
+                        alt="Search Icon"
+                        className="search-icon"
+                    />
+                </button>
+            </div>
+            <div>
+                {searchResults.map((result) => (
+                    <div key={result.id}>{result.name}</div>
+                ))}
             </div>
         </div>
     );
@@ -54,7 +90,7 @@ function Pagination({ currentPage, totalPages, onNextPage, onPreviousPage }) {
     const endItem = Math.min(currentPage * itemsPerPage, totalMedicines);
     return (
         <div className="pagination-container">
-            <span>Showing {startItem} - {endItem} results of {totalMedicines}</span>
+            <span className='8-page'>Showing {startItem} - {endItem}</span>
             <div className="pagination-controls">
                 <button onClick={onPreviousPage} disabled={currentPage === 1}>
                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/9c5603b1ade53a12461fcc579f39c2e84d89bb535241d15a38ce46cac6ef1981?apiKey=92503cb420154d6c95f36ba59a7a554b&" alt="Previous Page" className="pagination-icon" />
@@ -63,7 +99,6 @@ function Pagination({ currentPage, totalPages, onNextPage, onPreviousPage }) {
                 <button onClick={onNextPage} disabled={currentPage === totalPages}>
                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/73a4e29bb1c974471e9660a44354779d6ed7bceb50229ce1628cc2ba4ef68621?apiKey=92503cb420154d6c95f36ba59a7a554b&" alt="Next Page" className="pagination-icon" />
                 </button>
-                
             </div>
         </div>
     );
@@ -85,24 +120,22 @@ function AddNewEntryPopup({ onClose }) {
         };
         console.log('Submitting payload:', requestPayload);
 
-    
         axios.post('http://localhost:8080/addEntry', requestPayload)
             .then((response) => {
                 alert('Entry added successfully');
                 onClose(); // Close the popup after successful submission
             })
             .catch((error) => {
-              console.error('Error adding entry:', error);
-              if (error.response && error.response.data) {
-                  setError(error.response.data); 
-                  alert('Insufficient budget. The entry failed.');
-              } else {
-                  setError('Failed to add entry'); // Default error message
-                  alert(error.response.data);
-              }
-          });
+                console.error('Error adding entry:', error);
+                if (error.response && error.response.data) {
+                    setError(error.response.data); 
+                    alert('Insufficient budget. The entry failed.');
+                } else {
+                    setError('Failed to add entry'); // Default error message
+                    alert(error.response.data);
+                }
+            });
     };
-    
 
     return (
         <div className="popup-overlay">
@@ -135,135 +168,132 @@ function ConsumptionPopup({ onClose }) {
         };
         console.log('Submitting payload:', requestPayload);
 
-    
         axios.post('http://localhost:8080/consumeEntry', requestPayload)
             .then((response) => {
                 alert('Consumption added successfully');
-                onClose(); // Close the popup after successful submission
-            })
-            .catch((error) => {
-              console.error('Error adding consumption:', error);
-              if (error.response && error.response.data) {
-                  setError(error.response.data); 
-                  alert('Error??');
-              } else {
-                  setError('Failed to add consumption'); // Default error message
-                  alert(error.response.data);
+                onClose();
+              })
+              .catch((error) => {
+                  console.error('Error adding consumption:', error);
+                  if (error.response && error.response.data) {
+                      setError(error.response.data); 
+                      alert('Error??');
+                  } else {
+                      setError('Failed to add consumption'); // Default error message
+                      alert(error.response.data);
+                  }
+              });
+      };
+  
+      return (
+          <div className="popup-overlay">
+              <div className="add-new-entry-popup">
+                  <button className="close-button" onClick={onClose}>X</button>
+                  <h2>Add New Consumption</h2>
+                  <form onSubmit={handleSubmit}>
+                      <input type="text" name="drugName" placeholder="Drug Name" value={formData.drugName} onChange={handleInput} required />
+                      <input type="number" name="quantity" placeholder="Quantity" value={formData.quantity} onChange={handleInput} required />
+                      <button type="submit">Register Consumption</button>
+                  </form>
+              </div>
+          </div>
+      );
+  }
+  
+  export default function Inventory() {
+      const [currentPage, setCurrentPage] = useState(1);
+      const [searchQuery, setSearchQuery] = useState("");
+      const [searchResults, setSearchResults] = useState([]);
+      
+      const [showAddNewEntryPopup, setShowAddNewEntryPopup] = useState(false);
+      const [showConsumptionPopup, setShowConsumptionPopup] = useState(false);
+      const [listType, setListType] = React.useState('Medicines');
+      const [medicines, setMedicines] = useState([]);
+  
+      const fetchData = async (page) => {
+          try {
+              const response = await axios.get(`http://localhost:8080/drugs/getDrugsInPage?page=${page}`);
+              setMedicines(response.data);
+              console.log('Data fetched:', response.data);
+              console.log('Medicines:', medicines);
+          } catch (error) {
+              console.error('Error fetching data:', error);
+          }
+      };
+  
+      useEffect(() => {
+          fetchData(currentPage);
+      }, [currentPage]);
+  
+      const handleNextPage = () => {
+          setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+      };
+  
+      const handlePreviousPage = () => {
+          setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+      };
+  
+      const handleSearch = async () => {
+          try {
+              const response = await fetch(`http://localhost:8080/drugs/findByName?name=${searchQuery}`);
+              if (!response.ok) {
+                  throw new Error("Failed to fetch search results");
               }
-          });
-    };
-    
-
-    return (
-        <div className="popup-overlay">
-            <div className="add-new-entry-popup">
-                <button className="close-button" onClick={onClose}>X</button>
-                <h2>Add New Consumption</h2>
-                <form onSubmit={handleSubmit}>
-                    <input type="text" name="drugName" placeholder="Drug Name" value={formData.drugName} onChange={handleInput} required />
-                    <input type="number" name="quantity" placeholder="Quantity" value={formData.quantity} onChange={handleInput} required />
-                    <button type="submit">Register Consumption</button>
-                </form>
-            </div>
-        </div>
-    );
-}
-
-
-export default function Inventory() {
-    const [currentPage, setCurrentPage] = useState(1);
-    
-    const [showAddNewEntryPopup, setShowAddNewEntryPopup] = useState(false);
-    const [showConsumptionPopup, setShowConsumptionPopup] = useState(false);
-    const [listType, setListType] = React.useState('Medicines');
-    const [medicines, setMedicines] = useState([]);
-
-    const fetchData = async (page) => {
-        try {
-            const response = await axios.get(`http://localhost:8080/drugs/getDrugsInPage?page=${page}`);
-            setMedicines(response.data);
-            console.log('Data fetched:', response.data);
-            console.log('Medicines:', medicines);
-    
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    };
-
-    useEffect(() => {
-        fetchData(currentPage);
-    }, [currentPage]);
-
-    const handleNextPage = () => {
-        setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
-    };
-
-    const handlePreviousPage = () => {
-        setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
-    };
-
-    const toggleListType = () => {
-        setListType(prevType => prevType === 'Medicines' ? 'Illness Groups' : 'Medicines');
-    };
-
-    /*useEffect(() => {
-        // Fetch data from API
-        fetch('/drugstock/drugsInPage?page=1') // Adjust the URL as needed
-            .then(response => response.json())
-            .then(data => {
-                setMedicines(data);
-            })
-            .catch(error => console.error('Error fetching medicines:', error));
-    }, []);*/
-    
-
-    const handleAddNewEntryClick = () => {
-        setShowAddNewEntryPopup(true);
-    };
-
-    const handleConsumptionClick = () => {
-        setShowConsumptionPopup(true);
-    };
-
-    return (
-        <>
-            <header className="header">
-                <div className="header-content">
-                    <div className="header-left">
-                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/a0a9d789f882e264c6147f22c9098045cccac58ca47b5236bf41bb05030906c9?apiKey=166a782ca6344aad902f23b81529b6b9&" alt="Stockspital" className="header-logo" />
-                        <div className="header-name">Stockspital</div>
-                    </div>
-                    <div className="header-center">Spital Sf. Maria</div>
-                </div>
-            </header>
-            <main className="main-cont">
-                <section className="introducere">
-                    <div className="title-section">
-                        <h1 className="title">
-                            Inventory
-                            <span className="subtitle">{` > List of ${listType}`}</span>
-                        </h1>
-                        <div className="buttons">
-                            <button className="add-button" onClick={handleAddNewEntryClick}>
-                                {listType === 'Medicines' ? 'New Entry' : 'New Illness Group'}
-                            </button>
-                            <button className="remove-button" onClick={handleConsumptionClick}>
-                                Consume Entry
-                            </button>
-                        </div>
-                    </div>
-                    {listType === 'Medicines' ? <SearchBar /> : null}
-                    {listType === 'Medicines' ? <MedicinesTable medicines={medicines} /> : null}
-                    <Pagination
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        onNextPage={handleNextPage}
-                        onPreviousPage={handlePreviousPage}
-                    />
-                </section>
-            </main>
-            {showAddNewEntryPopup && <AddNewEntryPopup onClose={() => setShowAddNewEntryPopup(false)} />}
-            {showConsumptionPopup && <ConsumptionPopup onClose={() => setShowConsumptionPopup(false)} />}
-        </>
-    );
-}
+              const data = await response.json();
+              setMedicines(data);
+          } catch (error) {
+              console.error("Error searching drugs:", error);
+          }
+      };
+  
+      const handleAddNewEntryClick = () => {
+          setShowAddNewEntryPopup(true);
+      };
+  
+      const handleConsumptionClick = () => {
+          setShowConsumptionPopup(true);
+      };
+  
+      return (
+          <>
+              <header className="header">
+                  <div className="header-content">
+                      <div className="header-left">
+                          <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/a0a9d789f882e264c6147f22c9098045cccac58ca47b5236bf41bb05030906c9?apiKey=166a782ca6344aad902f23b81529b6b9&" alt="Stockspital" className="header-logo" />
+                          <div className="header-name">Stockspital</div>
+                      </div>
+                      <div className="header-center">Spital Sf. Maria</div>
+                  </div>
+              </header>
+              <main className="main-cont">
+                  <section className="introducere">
+                      <div className="title-section">
+                          <h1 className="title">
+                              Inventory
+                              <span className="subtitle">{` > List of ${listType}`}</span>
+                          </h1>
+                          <div className="buttons">
+                              <button className="add-button" onClick={handleAddNewEntryClick}>
+                                  {listType === 'Medicines' ? 'New Entry' : 'New Illness Group'}
+                              </button>
+                              <button className="remove-button" onClick={handleConsumptionClick}>
+                                  Consume Entry
+                              </button>
+                          </div>
+                      </div>
+                      {listType === 'Medicines' ? <SearchBar setMedicines={setMedicines} /> : null}
+                      {listType === 'Medicines' ? <MedicinesTable medicines={medicines} /> : null}
+                      <Pagination
+                          currentPage={currentPage}
+                          totalPages={totalPages}
+                          onNextPage={handleNextPage}
+                          onPreviousPage={handlePreviousPage}
+                      />
+                  </section>
+              </main>
+              {showAddNewEntryPopup && <AddNewEntryPopup onClose={() => setShowAddNewEntryPopup(false)} />}
+              {showConsumptionPopup && <ConsumptionPopup onClose={() => setShowConsumptionPopup(false)} />}
+          </>
+      );
+  }
+  

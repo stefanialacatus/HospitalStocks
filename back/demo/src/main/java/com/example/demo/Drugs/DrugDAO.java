@@ -42,13 +42,19 @@ public class DrugDAO {
     }
 
     public static List<Drugs> findByName(String name) {
-        String query = "SELECT * FROM drugs WHERE name LIKE ?";
+        String query = "SELECT d.name AS drug_name, " +
+                "d.dosage_form, " +
+                "(SELECT i.name FROM illnesses i JOIN illness_drug id ON i.id = id.illness_id WHERE id.drug_id = d.id LIMIT 1) AS illness, " +
+                "d.stock " +
+                "FROM drugs d " +
+                "WHERE d.name LIKE ?";
         return jdbcTemplate.query(query, new Object[]{"%" + name + "%"}, (rs, rowNum) -> {
             Drugs drug = new Drugs();
-            drug.setId(rs.getInt("id"));
-            drug.setName(rs.getString("name"));
+            drug.setName(rs.getString("drug_name"));
             drug.setDosageForm(rs.getString("dosage_form"));
-            drug.setPrice(rs.getBigDecimal("price"));
+            drug.setIllness(rs.getString("illness"));
+            drug.setStock(rs.getInt("stock"));
+            System.out.println("Found drug:" + drug);
             return drug;
         });
     }
@@ -69,7 +75,7 @@ public class DrugDAO {
             drug.setDosageForm(rs.getString("dosage_form"));
             drug.setIllness(rs.getString("illness"));
             drug.setStock(rs.getInt("stock"));
-            System.out.println("the info:" + drug);
+            //System.out.println("the info:" + drug);
             return drug;
         });
     }
@@ -82,7 +88,7 @@ public class DrugDAO {
             drug.setDosageForm(rs.getString("dosage_form"));
             drug.setIllness(rs.getString("illness"));
             drug.setStock(rs.getInt("stock"));
-            System.out.println("the info:" + drug);
+            //System.out.println("the info:" + drug);
             return drug;
         });
     }
