@@ -92,7 +92,7 @@ export default function Dashboard() {
             altText="Good Inventory Status"
             title="Inventory Status"
             value={dashboardData ? `${dashboardData.inventory.status}` : "No data"}
-            viewText={<a href="/statistics">View Detailed Statistic</a>}
+            viewText={<a href="/statistics" className="link-text">View Detailed Statistic</a>}
           />
           <Card
             borderColor="rgba(254, 214, 0, 1)"
@@ -101,7 +101,7 @@ export default function Dashboard() {
             altText="Budget"
             title={`Budget : June 2024`}
             value={dashboardData ? `${dashboardData.myHospital.budget}` : "No data"}
-            viewText={<a href="/inventory">View Details</a>}
+            viewText={<a href="/inventory" className="link-text">View Details</a>}
           />
           <Card
             borderColor="rgba(3, 169, 245, 1)"
@@ -110,7 +110,7 @@ export default function Dashboard() {
             altText="Medicines Available"
             title="Medicines Available"
             value={dashboardData? `${dashboardData.inventory.medicinesInStock}` : "No data"}
-            viewText={<a href="/inventory">Visit Inventory</a>}
+            viewText={<a href="/inventory" className="link-text">Visit Inventory</a>}
             
           />
           <Card
@@ -120,7 +120,7 @@ export default function Dashboard() {
             altText="Medicine Shortage"
             title="Medicine Shortage"
             value={dashboardData? `${dashboardData.inventory.medicineShortage}` : "No data"}
-            viewText={<a href="/statistics">View Detailed Statistic</a>}
+            viewText={<a href="/statistics" className="link-text">View Detailed Statistic</a>}
           />
         </section>
         <section className="sections">
