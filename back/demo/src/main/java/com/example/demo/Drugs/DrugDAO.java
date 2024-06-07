@@ -73,4 +73,17 @@ public class DrugDAO {
             return drug;
         });
     }
+
+    public static List<Drugs> getBadDrugsInPage(int page) {
+        String sql = "SELECT * FROM get_bad_drugs_with_illness()";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            Drugs drug = new Drugs();
+            drug.setName(rs.getString("drug_name"));
+            drug.setDosageForm(rs.getString("dosage_form"));
+            drug.setIllness(rs.getString("illness"));
+            drug.setStock(rs.getInt("stock"));
+            System.out.println("the info:" + drug);
+            return drug;
+        });
+    }
 }
