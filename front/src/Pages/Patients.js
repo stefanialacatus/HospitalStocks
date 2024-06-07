@@ -18,7 +18,7 @@ function SearchBar() {
     );
 }
 
-function PatientList({ firstName, lastName, illness_name, id }) {
+function PatientList({ firstName, lastName, illnessName, id }) {
     const [showRemoveModal, setShowRemoveModal] = React.useState(false);
 
     const openRemoveModal = () => {
@@ -30,16 +30,24 @@ function PatientList({ firstName, lastName, illness_name, id }) {
     };
 
     const handleRemovePatient = () => {
-        // Functionality to remove the patient
-        console.log(`Removing patient ${id}`);
-        setShowRemoveModal(false);
+        axios.delete(`http://localhost:8080/patients/deletePatient/${firstName}/${lastName}`)
+            .then((response) => {
+                alert('Patient removed successfully');
+                closeRemoveModal();
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.error('Error removing patient:', error);
+                alert('Failed to remove patient');
+            });
     };
+
 
     return (
         <tr className="medicine-list-item">
             <td>{firstName}</td>
             <td>{lastName}</td>
-            <td>{illness_name}</td>
+            <td>{illnessName}</td>
             <td className="view-details">
                 <span onClick={openRemoveModal}>Remove Patient</span>
                 <img
@@ -177,6 +185,10 @@ export default function Patients() {
                         <div className="header-name">Stockspital</div>
                     </div>
                     <div className="header-center">Spital Sf. Maria</div>
+                    <div className="header-right">
+                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/7e038ee69d5e007292339b72556c5ec5e57b20ff249d1a7e300aae51ba5b3bf2?apiKey=166a782ca6344aad902f23b81529b6b9&" alt="Notifications" className="header-notification-icon" />
+                        <div className="header-notification-text">Notifications</div>
+                    </div>
                 </div>
             </header>
             <main className="main-cont">
