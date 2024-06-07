@@ -120,13 +120,61 @@ function AddNewEntryPopup({ onClose }) {
     );
 }
 
+function ConsumptionPopup({ onClose }) {
+    const [formData, setFormData] = React.useState({ drugName: '', supplierName: '', quantity: ''});
+    const [error, setError] = useState('');
+    const handleInput = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const requestPayload = {
+            drugName: formData.drugName,
+            quantity: parseInt(formData.quantity, 10),
+        };
+        console.log('Submitting payload:', requestPayload);
+
+    
+        axios.post('http://localhost:8080/consumeEntry', requestPayload)
+            .then((response) => {
+                alert('Consumption added successfully');
+                onClose(); // Close the popup after successful submission
+            })
+            .catch((error) => {
+              console.error('Error adding consumption:', error);
+              if (error.response && error.response.data) {
+                  setError(error.response.data); 
+                  alert('Insufficient budget. The entry failed.');
+              } else {
+                  setError('Failed to add consumption'); // Default error message
+                  alert(error.response.data);
+              }
+          });
+    };
+    
+
+    return (
+        <div className="popup-overlay">
+            <div className="add-new-entry-popup">
+                <button className="close-button" onClick={onClose}>X</button>
+                <h2>Add New Consumption</h2>
+                <form onSubmit={handleSubmit}>
+                    <input type="text" name="drugName" placeholder="Drug Name" value={formData.drugName} onChange={handleInput} required />
+                    <input type="number" name="quantity" placeholder="Quantity" value={formData.quantity} onChange={handleInput} required />
+                    <button type="submit">Register Consumption</button>
+                </form>
+            </div>
+        </div>
+    );
+}
 
 
 export default function Inventory() {
     const [currentPage, setCurrentPage] = useState(1);
     
     const [showAddNewEntryPopup, setShowAddNewEntryPopup] = useState(false);
+    const [showConsumptionPopup, setShowConsumptionPopup] = useState(false);
     const [listType, setListType] = React.useState('Medicines');
     const [medicines, setMedicines] = useState([]);
 
@@ -173,6 +221,10 @@ export default function Inventory() {
         setShowAddNewEntryPopup(true);
     };
 
+    const handleConsumptionClick = () => {
+        setShowConsumptionPopup(true);
+    };
+
     return (
         <>
             <header className="header">
@@ -195,6 +247,9 @@ export default function Inventory() {
                             <button className="add-button" onClick={handleAddNewEntryClick}>
                                 {listType === 'Medicines' ? 'New Entry' : 'New Illness Group'}
                             </button>
+                            <button className="remove-button" onClick={handleConsumptionClick}>
+                                Consume Entry
+                            </button>
                         </div>
                     </div>
                     {listType === 'Medicines' ? <SearchBar /> : null}
@@ -208,6 +263,7 @@ export default function Inventory() {
                 </section>
             </main>
             {showAddNewEntryPopup && <AddNewEntryPopup onClose={() => setShowAddNewEntryPopup(false)} />}
+            {showConsumptionPopup && <ConsumptionPopup onClose={() => setShowConsumptionPopup(false)} />}
         </>
     );
 }
