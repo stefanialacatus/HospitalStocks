@@ -29,7 +29,11 @@ public class DrugController {
 
     @GetMapping("/getDrugsInPage")
     public List<Drugs> getDrugsInPage(@RequestParam("page") int page) {
-        // Call the method to get drugs for the given page number
         return DrugDAO.getDrugsInPage(page);
+    }
+    @GetMapping("/getBadDrugsInPage")
+    public List<Drugs> getBadDrugsInPage(@RequestParam("page") int page) {
+        page = 1;
+        return DrugDAO.getBadDrugsInPage(page);
     }
 }

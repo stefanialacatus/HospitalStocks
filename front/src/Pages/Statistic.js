@@ -70,7 +70,7 @@ export default function Inventory() {
 
     const fetchData = async (page) => {
         try {
-            const response = await axios.get(`http://localhost:8080/drugs/getDrugsInPage?page=${page}`);
+            const response = await axios.get(`http://localhost:8080/drugs/getBadDrugsInPage?page=${page}`);
             setMedicines(response.data);
             console.log('Data fetched:', response.data);
             console.log('Medicines:', medicines);
