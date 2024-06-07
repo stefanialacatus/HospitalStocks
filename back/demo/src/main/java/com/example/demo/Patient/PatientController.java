@@ -1,4 +1,4 @@
-package com.example.demo.Drugs;
+package com.example.demo.Patient;
 
 import com.example.demo.DrugEntry.DrugEntry;
 import com.example.demo.DrugEntry.DrugEntryRequest;
