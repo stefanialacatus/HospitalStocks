@@ -43,4 +43,5 @@ public class DrugEntryController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while adding the entry");
         }
     }
+
 }
