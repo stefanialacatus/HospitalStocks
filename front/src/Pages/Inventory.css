@@ -215,16 +215,19 @@ body {
     padding: 10px 0;
 }
 
-.pagination-controls {
-    display: flex;
-    gap: 5px;
-    align-items: center;
+.pagination-controls button {
+    
+    border: none;
+    cursor: pointer;
 }
 
-.pagination-icon {
-    width: 20px;
+.pagination-controls button img {
+    width: 20px; /* Adjust size of arrow symbols */
     height: 20px;
+    
 }
+
+
 
 .popup-overlay {
     position: fixed;

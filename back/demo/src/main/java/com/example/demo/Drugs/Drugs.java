@@ -15,4 +15,8 @@ public class Drugs {
     private String name;
     private String dosageForm;
     private String unit;
+    private String illness;
+    private int stock;
+
+
 }

@@ -28,7 +28,7 @@ export default function Dashboard() {
       .then(data => setDashboardData(data))
       .catch(error => console.error("Error fetching dashboard data:", error));
   }, []); // Run only once on component mount  
-
+  console.log(dashboardData);
   const getCurrentMonth = () => {
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     return months[new Date().getMonth()];
@@ -74,7 +74,7 @@ export default function Dashboard() {
             imageSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/7aec50645de34d85a4de3ccc837680bef90c56fa4c8f934829eb39524af505c9?apiKey=166a782ca6344aad902f23b81529b6b9&"
             altText="Budget"
             title={`Budget : ${getCurrentMonth()} ${getCurrentYear()}`}
-            value={"No data"}
+            value={dashboardData ? `${dashboardData.myHospital.budget}` : "No data"}
             viewText="View Detailed Statistic"
           />
           <Card
@@ -84,7 +84,8 @@ export default function Dashboard() {
             altText="Medicines Available"
             title="Medicines Available"
             value={dashboardData? `${dashboardData.inventory.medicinesInStock}` : "No data"}
-            viewText="Visit Inventory"
+            viewText={<a href="/inventory">Visit Inventory</a>}
+            
           />
           <Card
             borderColor="rgba(240, 72, 62, 1)"

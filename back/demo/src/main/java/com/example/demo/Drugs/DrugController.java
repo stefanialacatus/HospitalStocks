@@ -26,4 +26,10 @@ public class DrugController {
     public List<Drugs> searchDrugsByName(@RequestParam("name") String name) {
         return DrugDAO.findByName(name);
     }
+
+    @GetMapping("/getDrugsInPage")
+    public List<Drugs> getDrugsInPage(@RequestParam("page") int page) {
+        // Call the method to get drugs for the given page number
+        return DrugDAO.getDrugsInPage(page);
+    }
 }

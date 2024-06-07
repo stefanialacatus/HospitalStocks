@@ -3,6 +3,10 @@ import './Inventory.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+const itemsPerPage = 8;
+const totalMedicines = 152; 
+const totalPages = Math.ceil(totalMedicines / itemsPerPage); 
+
 function SearchBar() {
     return (
         <div className="search-bar-container">
@@ -54,15 +58,21 @@ function MedicinesTable({ medicines }) {
     );
 }
 
-function Pagination() {
+function Pagination({ currentPage, totalPages, onNextPage, onPreviousPage }) {
+    const startItem = (currentPage - 1) * itemsPerPage + 1;
+    const endItem = Math.min(currentPage * itemsPerPage, totalMedicines);
     return (
         <div className="pagination-container">
-            <span>Showing 1 - 8 results of 298</span>
+            <span>Showing {startItem} - {endItem} results of {totalMedicines}</span>
             <div className="pagination-controls">
-                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/9c5603b1ade53a12461fcc579f39c2e84d89bb535241d15a38ce46cac6ef1981?apiKey=92503cb420154d6c95f36ba59a7a554b&" alt="Previous Page" className="pagination-icon" />
-                <span>Page 01</span>
-                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/57c9dc11e65aa7ca10e40536198477735aa6783a5c6b26a8719815fc6b83eab2?apiKey=92503cb420154d6c95f36ba59a7a554b&" alt="Next Page" className="pagination-icon" />
-                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/73a4e29bb1c974471e9660a44354779d6ed7bceb50229ce1628cc2ba4ef68621?apiKey=92503cb420154d6c95f36ba59a7a554b&" alt="Last Page" className="pagination-icon" />
+                <button onClick={onPreviousPage} disabled={currentPage === 1}>
+                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/9c5603b1ade53a12461fcc579f39c2e84d89bb535241d15a38ce46cac6ef1981?apiKey=92503cb420154d6c95f36ba59a7a554b&" alt="Previous Page" className="pagination-icon" />
+                </button>
+                <span>Page {currentPage < 10 ? `${currentPage}` : currentPage}</span>
+                <button onClick={onNextPage} disabled={currentPage === totalPages}>
+                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/73a4e29bb1c974471e9660a44354779d6ed7bceb50229ce1628cc2ba4ef68621?apiKey=92503cb420154d6c95f36ba59a7a554b&" alt="Next Page" className="pagination-icon" />
+                </button>
+                
             </div>
         </div>
     );
@@ -117,9 +127,35 @@ function AddNewEntryPopup({ onClose }) {
 
 
 export default function Inventory() {
+    const [currentPage, setCurrentPage] = useState(1);
+    
     const [showAddNewEntryPopup, setShowAddNewEntryPopup] = useState(false);
     const [listType, setListType] = React.useState('Medicines');
     const [medicines, setMedicines] = useState([]);
+
+    const fetchData = async (page) => {
+        try {
+            const response = await axios.get(`http://localhost:8080/drugs/getDrugsInPage?page=${page}`);
+            setMedicines(response.data);
+            console.log('Data fetched:', response.data);
+            console.log('Medicines:', medicines);
+    
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchData(currentPage);
+    }, [currentPage]);
+
+    const handleNextPage = () => {
+        setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+    };
+
+    const handlePreviousPage = () => {
+        setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+    };
 
     const toggleListType = () => {
         setListType(prevType => prevType === 'Medicines' ? 'Illness Groups' : 'Medicines');
@@ -134,21 +170,7 @@ export default function Inventory() {
             })
             .catch(error => console.error('Error fetching medicines:', error));
     }, []);*/
-    const sampleMedicines = [
-      { name: "Augmentin 625 Duo Tablet", dosageForm: "tablet", illness: "Generic Medicine", stock: 350, id: "D06ID232435450" },
-      { name: "Azithral 500 Tablet", dosageForm: "injection", illness: "Generic Medicine", stock: 20, id: "D06ID232435455" },
-      { name: "Ascoril LS Syrup", dosageForm: "inhaler", illness: "Diabetes", stock: 85, id: "D06ID232435456" },
-      { name: "Azee 500 Tablet", dosageForm: "D06ID232435450", illness: "Generic Medicine", stock: 75, id: "D06ID232435457" },
-      { name: "Allegra 120mg Tablet", dosageForm: "D06ID232435455", illness: "Diabetes", stock: 44, id: "D06ID232435458" },
-      { name: "Alex Syrup", dosageForm: "D06ID232435455", illness: "Generic Medicine", stock: 65, id: "D06ID232435459" },
-      { name: "Amoxyclav 625 Tablet", dosageForm: "D06ID232435455", illness: "Generic Medicine", stock: 150, id: "D06ID232435460" },
-      { name: "Avil 25 Tablet", dosageForm: "D06ID232435455", illness: "Generic Medicine", stock: 270, id: "D06ID232435461" },
-  ];
-
-  // Set the sample data to state
-  useEffect(() => {
-      setMedicines(sampleMedicines);
-  }, []);
+    
 
     const handleAddNewEntryClick = () => {
         setShowAddNewEntryPopup(true);
@@ -187,8 +209,13 @@ export default function Inventory() {
                         </div>
                     </div>
                     {listType === 'Medicines' ? <SearchBar /> : null}
-                    {listType === 'Medicines' ? <MedicinesTable medicines={sampleMedicines} /> : null}
-                    <Pagination />
+                    {listType === 'Medicines' ? <MedicinesTable medicines={medicines} /> : null}
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onNextPage={handleNextPage}
+                        onPreviousPage={handlePreviousPage}
+                    />
                 </section>
             </main>
             {showAddNewEntryPopup && <AddNewEntryPopup onClose={() => setShowAddNewEntryPopup(false)} />}
