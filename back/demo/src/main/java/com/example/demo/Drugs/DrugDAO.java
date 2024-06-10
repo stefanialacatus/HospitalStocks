@@ -2,6 +2,7 @@ package com.example.demo.Drugs;
 
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Repository
 public class DrugDAO {
+    @Setter
     private static Integer filter = 0;
 
     private static JdbcTemplate jdbcTemplate = null;
@@ -115,6 +117,7 @@ public class DrugDAO {
             return drug;
         });
     }
+}
     public static void setFilter(Integer value) { //Reflection API
         try {
             Field field = DrugDAO.class.getDeclaredField("filter");

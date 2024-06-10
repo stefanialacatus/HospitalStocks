@@ -5,16 +5,88 @@ import axios from 'axios';
 
 const itemsPerPage = 8;
 
+function SearchBar({ setPatients, setTotalPatients, setTotalPages, setCurrentPage }) {
+    const [searchQuery, setSearchQuery] = useState("");
+    const [selectedOption, setSelectedOption] = useState('filter');
+    const [searchResults, setSearchResults] = useState([]);
 
-function SearchBar() {
+    const handleSearch = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/patients/searchByName?name=${searchQuery}`);
+            if (!response.ok) {
+                throw new Error("Failed to fetch search results");
+            }
+            const data = await response.json();
+            setPatients(data);
+            setTotalPatients(data.length); 
+            setTotalPages(Math.ceil(data.length / itemsPerPage)); 
+            setCurrentPage(1); 
+        } catch (error) {
+            console.error("Error searching patients:", error);
+        }
+    };
+
+    const handleChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
+
+    const handleOptionChange = (event) => {
+        const selectedValue = event.target.value;
+        setSelectedOption(selectedValue);
+        sendDataToBackend(selectedValue);
+        console.log('Selected value:', selectedValue);
+    };
+
+    const sendDataToBackend = async (selectedValue) => {
+        try {
+            const response = await fetch('http://localhost:8080/patients/filter', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ selectedValue })
+            });
+            if (!response.ok) {
+                throw new Error('Failed to fetch filtered patients');
+            }
+            const data = await response.json();
+            setPatients(data);
+            console.log('Filtered patients:', data);
+        } catch (error) {
+            console.error('Error filtering patients:', error);
+        }
+    };
     return (
         <div className="search-bar-container">
             <div className="search-input-container">
-                <input type="text" placeholder="Search Patient .." className="search-input" />
-                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/3bf32ee1d2c19add8b4a5c84df63fc01d3fddfae65e52490b0e402e5b6b519e5?apiKey=92503cb420154d6c95f36ba59a7a554b&" alt="Search Icon" className="search-icon" />
+                <input
+                    type="text"
+                    placeholder="Search Medicine Inventory.."
+                    className="search-input"
+                    value={searchQuery}
+                    onChange={handleChange}
+                />
+                <button onClick={handleSearch}>
+                    <img
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/3bf32ee1d2c19add8b4a5c84df63fc01d3fddfae65e52490b0e402e5b6b519e5?apiKey=92503cb420154d6c95f36ba59a7a554b&"
+                        alt="Search Icon"
+                        className="search-icon"
+                    />
+                </button>
             </div>
+            <div>
+                {searchResults.map((result) => (
+                    <div key={result.id}>{result.name}</div>
+                ))}
+            </div>
+            <select className="filter-drop" value={selectedOption} onChange={handleOptionChange}>
+                <option value="filter">Filter</option>
+                <option value="az">A-Z</option>
+                <option value="za">Z-A</option>
+            </select>
         </div>
     );
+
 }
 
 function PatientList({ firstName, lastName, illnessName, id }) {
@@ -117,6 +189,8 @@ function Pagination({ currentPage, totalPages, onNextPage, onPreviousPage, total
 
 
 export default function Patients() {
+    const [filteredPatients, setFilteredPatients] = useState([]);
+    const [currentFilter, setCurrentFilter] = useState(null);
     const [TotalPages, setTotalPages] = useState(null);
     const [patients, setPatients] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -167,7 +241,10 @@ export default function Patients() {
             const response = await axios.get(`http://localhost:8080/patients/getPatientsInPage?page=${page}`);
             setPatients(response.data);
             setTotalPatients(response.data.length);
-            setTotalPages(Math.ceil(totalPatients / itemsPerPage));
+            setTotalPages(Math.ceil(response.data.length / itemsPerPage));
+            if (currentFilter) {
+                applyFilter(currentFilter);
+            }
             console.log('Total pages:', TotalPages);
             console.log('Total patients:', totalPatients);
             console.log('Data fetched:', response.data);
@@ -182,11 +259,21 @@ export default function Patients() {
         }, 60000);
 
         return () => clearInterval(interval);
-    }, [currentPage]);
+    }, [currentFilter]);
 
     useEffect(() => {
         fetchData(currentPage);
-    }, [currentPage]);
+    }, [currentFilter]);
+
+    const applyFilter = async (filter) => {
+        try {
+            const response = await axios.post('http://localhost:8080/patients/filter', { filter });
+            setFilteredPatients(response.data);
+            setCurrentFilter(filter);
+        } catch (error) {
+            console.error('Error applying filter:', error);
+        }
+    };
 
     const handleNextPage = () => {
         setCurrentPage((prevPage) => Math.min(prevPage + 1, TotalPages));
@@ -220,8 +307,16 @@ export default function Patients() {
                             </button>
                         </div>
                     </div>
+                    <SearchBar 
+                        setPatients={setPatients} 
+                        setTotalPatients={setTotalPatients}
+                        setTotalPages={setTotalPages}
+                        setCurrentPage={setCurrentPage}
+
+                    
+                    />
                     <PatientsTable 
-                        patients={patients} 
+                        patients={currentFilter? filteredPatients : patients} 
                         currentPage={currentPage}
                         itemsPerPage={itemsPerPage}
                         totalPatients={totalPatients}
