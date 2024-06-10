@@ -4,8 +4,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const itemsPerPage = 8;
-const totalPatients = 163;
-const totalPages = Math.ceil(totalPatients / itemsPerPage);
+
 
 function SearchBar() {
     return (
@@ -34,7 +33,7 @@ function PatientList({ firstName, lastName, illnessName, id }) {
             .then((response) => {
                 alert('Patient removed successfully');
                 closeRemoveModal();
-                window.location.reload();
+                /*window.location.reload();*/
             })
             .catch((error) => {
                 console.error('Error removing patient:', error);
@@ -71,7 +70,12 @@ function PatientList({ firstName, lastName, illnessName, id }) {
     );
 }
 
-function PatientsTable({ patients }) {
+function PatientsTable({ patients, currentPage, itemsPerPage, totalPatients }) {
+    const startIndex = (currentPage - 1) * itemsPerPage + 1;
+    const endIndex = Math.min(currentPage * itemsPerPage, totalPatients);
+
+    const displayedPatients = patients.slice(startIndex, endIndex);
+
     return (
         <table className="medicines-table">
             <thead>
@@ -83,7 +87,7 @@ function PatientsTable({ patients }) {
                 </tr>
             </thead>
             <tbody>
-                {patients.map((patient) => (
+                {displayedPatients.map((patient) => (
                     <PatientList key={patient.id} {...patient} />
                 ))}
             </tbody>
@@ -91,7 +95,8 @@ function PatientsTable({ patients }) {
     );
 }
 
-function Pagination({ currentPage, totalPages, onNextPage, onPreviousPage }) {
+
+function Pagination({ currentPage, totalPages, onNextPage, onPreviousPage, totalPatients }) {
     const startItem = (currentPage - 1) * itemsPerPage + 1;
     const endItem = Math.min(currentPage * itemsPerPage, totalPatients);
     return (
@@ -110,10 +115,13 @@ function Pagination({ currentPage, totalPages, onNextPage, onPreviousPage }) {
     );
 }
 
+
 export default function Patients() {
+    const [TotalPages, setTotalPages] = useState(null);
     const [patients, setPatients] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [showAddModal, setShowAddModal] = useState(false);
+    const [totalPatients, setTotalPatients] = useState(1);
     const [newPatient, setNewPatient] = useState({
         firstName: "",
         lastName: "",
@@ -146,7 +154,7 @@ export default function Patients() {
             .then((response) => {
                 alert('Patient added successfully');
                 closeAddModal();
-                fetchData(currentPage); // Refresh the list after adding a patient
+                fetchData(currentPage);
             })
             .catch((error) => {
                 console.error('Error adding patient:', error);
@@ -158,6 +166,10 @@ export default function Patients() {
         try {
             const response = await axios.get(`http://localhost:8080/patients/getPatientsInPage?page=${page}`);
             setPatients(response.data);
+            setTotalPatients(response.data.length);
+            setTotalPages(Math.ceil(totalPatients / itemsPerPage));
+            console.log('Total pages:', TotalPages);
+            console.log('Total patients:', totalPatients);
             console.log('Data fetched:', response.data);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -165,11 +177,19 @@ export default function Patients() {
     };
 
     useEffect(() => {
+        const interval = setInterval(() => {
+            fetchData(currentPage);
+        }, 60000);
+
+        return () => clearInterval(interval);
+    }, [currentPage]);
+
+    useEffect(() => {
         fetchData(currentPage);
     }, [currentPage]);
 
     const handleNextPage = () => {
-        setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+        setCurrentPage((prevPage) => Math.min(prevPage + 1, TotalPages));
     };
 
     const handlePreviousPage = () => {
@@ -200,12 +220,19 @@ export default function Patients() {
                             </button>
                         </div>
                     </div>
-                    <PatientsTable patients={patients} />
+                    <PatientsTable 
+                        patients={patients} 
+                        currentPage={currentPage}
+                        itemsPerPage={itemsPerPage}
+                        totalPatients={totalPatients}
+                    
+                    />
                     <Pagination
                         currentPage={currentPage}
-                        totalPages={totalPages}
+                        totalPages={TotalPages}
                         onNextPage={handleNextPage}
                         onPreviousPage={handlePreviousPage}
+                        totalPatients={totalPatients}
                     />
                 </section>
                 {showAddModal && (

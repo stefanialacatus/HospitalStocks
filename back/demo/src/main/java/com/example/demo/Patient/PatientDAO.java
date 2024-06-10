@@ -59,10 +59,22 @@ public class PatientDAO {
         return jdbcTemplate.queryForObject(sql, String.class);
     }
 
-    public static List<Patient> getPatientsInPage(int page) {
-        // Call the stored procedure or function to get drugs for the given page number
+    /*public static List<Patient> getPatientsInPage(int page) {
         String sql = "SELECT * FROM get_patient_illness_info(?)";
         return jdbcTemplate.query(sql, new Object[]{page}, (rs, rowNum) -> {
+            Patient patient = new Patient();
+            patient.setFirstName(rs.getString("first_name"));
+            patient.setLastName(rs.getString("last_name"));
+            patient.setIllnessName(rs.getString("illness_name"));
+
+            System.out.println("the info:" + patient);
+            return patient;
+        });
+    }*/
+
+    public static List<Patient> getPatientsInPage(int page) {
+        String sql = "SELECT * FROM patient_info_nopage()";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
             Patient patient = new Patient();
             patient.setFirstName(rs.getString("first_name"));
             patient.setLastName(rs.getString("last_name"));
@@ -84,7 +96,7 @@ public class PatientDAO {
                 return null;
             });
         } catch (Exception e) {
-            // Handle the exception appropriately, e.g., log it or throw a custom exception
+            System.err.println("Error adding patient: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -97,5 +109,4 @@ public class PatientDAO {
             return null;
         });
     }
-
 }

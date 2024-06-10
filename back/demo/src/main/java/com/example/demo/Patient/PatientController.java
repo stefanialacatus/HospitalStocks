@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -20,11 +21,40 @@ public class PatientController {
     private PatientDAO patientsDAO;
 
 
-    @GetMapping("/getPatientsInPage")
+    /*@GetMapping("/getPatientsInPage")
     public List<Patient> getPatientsInPage(@RequestParam("page") int page) {
         // Call the method to get drugs for the given page number
         return PatientDAO.getPatientsInPage(page);
+    }*/
+
+    @Autowired
+    private PatientDAO patientDAO;
+    private PatientSyncService patientDataSyncService;
+
+    @GetMapping("/getPatientsInPage")
+    public List<Patient> getPatientsInPage(@RequestParam("page") int page) {
+        List<Patient> patients = patientDAO.getPatientsInPage(page);
+        if (patients == null || patients.isEmpty()) {
+            return Collections.emptyList(); // Return an empty list if no patients found
+        }
+        return patients;
     }
+
+   /* @PostMapping("/addPatient")
+    public ResponseEntity<String> addPatient(@RequestBody PatientRequest request) {
+        try {
+            patientDataSyncService.getPatientDAO().addPatient(request.getFirstName(), request.getLastName(), request.getIllnessName());
+            return new ResponseEntity<>("Patient added successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error adding patient: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/deletePatient/{firstName}/{lastName}")
+    public ResponseEntity<String> deletePatient(@PathVariable String firstName, @PathVariable String lastName) {
+        patientDataSyncService.getPatientDAO().deletePatient(firstName, lastName);
+        return new ResponseEntity<>("Patient deleted successfully", HttpStatus.OK);
+    }*/
     @PostMapping("/addPatient")
     public ResponseEntity<String> addPatient(@RequestBody PatientRequest request) {
         try {
