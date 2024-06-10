@@ -13,5 +13,9 @@ public class DrugEntryRequest {
     private String drugName;
     private int quantity;
     private String supplierName;
-
+    public DrugEntryRequest(String name, int quantity, String supplierName) {
+        this.drugName = name;
+        this.quantity = quantity;
+        this.supplierName = supplierName;
+    }
 }

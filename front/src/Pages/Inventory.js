@@ -253,6 +253,24 @@ function ConsumptionPopup({ onClose }) {
       const handleConsumptionClick = () => {
           setShowConsumptionPopup(true);
       };
+
+      const handleFileUpload = async (event) => {
+        const file = event.target.files[0];
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await axios.post('http://localhost:8080/importFile', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            alert('File uploaded successfully');
+        } catch (error) {
+            console.error('Error uploading file:', error);
+            alert('Failed to upload file');
+        }
+      };
   
       return (
           <>
@@ -278,6 +296,15 @@ function ConsumptionPopup({ onClose }) {
                               </button>
                               <button className="remove-button" onClick={handleConsumptionClick}>
                                   Consume Entry
+                              </button>
+                              <input 
+                                  type="file" 
+                                  id="fileUpload" 
+                                  style={{ display: 'none' }} 
+                                  onChange={handleFileUpload} 
+                              />
+                              <button className="file-button" onClick={() => document.getElementById('fileUpload').click()}>
+                                  Upload Entry File
                               </button>
                           </div>
                       </div>

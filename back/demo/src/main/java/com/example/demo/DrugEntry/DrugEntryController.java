@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.SQLException;
 
@@ -43,5 +44,14 @@ public class DrugEntryController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while adding the entry");
         }
     }
-
+    @PostMapping("/importFile")
+    public String uploadFile(@RequestParam("file") MultipartFile file) {
+        try {
+            DrugEntryDAO.importData(file);
+            return "File uploaded and data imported successfully.";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Failed to upload file.";
+        }
+    }
 }
