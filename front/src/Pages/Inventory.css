@@ -12,6 +12,11 @@ body {
     padding: 9px 60px;
     color: #fff;
 }
+select.filter-drop {
+    outline: none;
+    border: none;
+    background-color: #E3EBF3;
+  }
 
 .header-content {
     display: flex;

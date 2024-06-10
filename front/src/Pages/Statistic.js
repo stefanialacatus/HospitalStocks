@@ -61,25 +61,6 @@ function MedicinesTable({ medicines }) {
     );
 }
 
-function Pagination({ currentPage, totalPages, onNextPage, onPreviousPage }) {
-    const startItem = (currentPage - 1) * itemsPerPage + 1;
-    const endItem = Math.min(currentPage * itemsPerPage, totalMedicines);
-    return (
-        <div className="pagination-container">
-            <span>Showing {startItem} - {endItem}</span>
-            <div className="pagination-controls">
-                <button onClick={onPreviousPage} disabled={currentPage === 1}>
-                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/9c5603b1ade53a12461fcc579f39c2e84d89bb535241d15a38ce46cac6ef1981?apiKey=92503cb420154d6c95f36ba59a7a554b&" alt="Previous Page" className="pagination-icon" />
-                </button>
-                <span>Page {currentPage < 10 ? `${currentPage}` : currentPage}</span>
-                <button onClick={onNextPage} disabled={currentPage === totalPages}>
-                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/73a4e29bb1c974471e9660a44354779d6ed7bceb50229ce1628cc2ba4ef68621?apiKey=92503cb420154d6c95f36ba59a7a554b&" alt="Next Page" className="pagination-icon" />
-                </button>
-                
-            </div>
-        </div>
-    );
-}
 
 export default function Inventory() {
     const [currentPage, setCurrentPage] = useState(1);
@@ -137,12 +118,6 @@ export default function Inventory() {
                         </h1>
                     </div>
                     {listType === 'Medicines' ? <MedicinesTable medicines={medicines} /> : null}
-                    <Pagination
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        onNextPage={handleNextPage}
-                        onPreviousPage={handlePreviousPage}
-                    />
                     <div className="chart-container">
                         <h2>Medicines Bar Chart</h2>
                         <BarChartExample data={barChartData} />
