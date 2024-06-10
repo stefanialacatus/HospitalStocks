@@ -16,6 +16,7 @@ public class Drugs {
     private String dosageForm;
     private String unit;
     private String illness;
+    private int average_stock;
     private int stock;
 
 
