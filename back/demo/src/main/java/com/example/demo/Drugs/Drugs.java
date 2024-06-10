@@ -1,19 +1,15 @@
 package com.example.demo.Drugs;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
 import java.math.BigDecimal;
 
-@Getter
-@Setter
-@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Drugs {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private BigDecimal price;
     private String name;

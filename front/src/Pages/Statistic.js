@@ -2,18 +2,37 @@ import * as React from 'react';
 import './Statistic.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const itemsPerPage = 8;
 const totalMedicines = 50; 
 const totalPages = Math.ceil(totalMedicines / itemsPerPage); 
 
-function MedicineListItem({ name, dosageForm, illness, stock, id }) {
+const BarChartExample = ({ data }) => {
+    return (
+      <ResponsiveContainer width="100%" height={300}>
+        <BarChart
+          data={data}
+          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="pv" fill="#8884d8" />
+          <Bar dataKey="uv" fill="#82ca9d" />
+        </BarChart>
+      </ResponsiveContainer>
+    );
+  };
+function MedicineListItem({ name, dosageForm, stock, average_stock, id }) {
     return (
         <tr className="medicine-list-item">
             <td>{name}</td>
             <td>{dosageForm}</td>
-            <td>{illness}</td>
             <td>{stock}</td>
+            <td>{average_stock}</td>
             <td className="view-details-status">
                 <span>Bad</span>
             </td>
@@ -28,8 +47,8 @@ function MedicinesTable({ medicines }) {
                 <tr>
                     <th>Name</th>
                     <th>Dosage Form</th>
-                    <th>Illness</th>
                     <th>Stock in Qty</th>
+                    <th>Ideal Stock</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -67,6 +86,7 @@ export default function Inventory() {
 
     const [listType, setListType] = React.useState('Medicines');
     const [medicines, setMedicines] = useState([]);
+    const [barChartData, setBarChartData] = useState([]);
 
     const fetchData = async (page) => {
         try {
@@ -74,7 +94,12 @@ export default function Inventory() {
             setMedicines(response.data);
             console.log('Data fetched:', response.data);
             console.log('Medicines:', medicines);
-    
+            const chartData = response.data.map(medicine => ({
+                name: medicine.name,
+                pv: medicine.stock, // You can adjust this based on your data structure
+                uv: medicine.average_stock, // You can adjust this based on your data structure
+            }));
+            setBarChartData(chartData);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -118,6 +143,10 @@ export default function Inventory() {
                         onNextPage={handleNextPage}
                         onPreviousPage={handlePreviousPage}
                     />
+                    <div className="chart-container">
+                        <h2>Medicines Bar Chart</h2>
+                        <BarChartExample data={barChartData} />
+                    </div>
                 </section>
             </main>
         </>
