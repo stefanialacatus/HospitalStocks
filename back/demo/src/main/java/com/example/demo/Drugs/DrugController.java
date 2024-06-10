@@ -1,10 +1,13 @@
 package com.example.demo.Drugs;
 
+import com.example.demo.Drugs.repository.DrugRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -13,7 +16,8 @@ public class DrugController {
 
     @Autowired
     private DrugDAO drugService;
-
+    @Autowired
+    private DrugRepository drugRepository;
     @GetMapping("/getAllDrugs")
     public List<Drugs> getAllDrugs() {
         return DrugDAO.getAllDrugs();
@@ -46,4 +50,16 @@ public class DrugController {
     public int countDrugs() {
         return DrugDAO.getMedicinesAvailable();
     }
+    @GetMapping("/search")
+    public List<DrugsJPA> search(@RequestParam(value = "name", defaultValue = "") String name) {
+        if (name.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<DrugsJPA> suggestions = drugRepository.findByNameContainingIgnoreCase(name);
+
+        return suggestions.stream()
+                .limit(10)
+                .collect(Collectors.toList());
+    }
+
 }

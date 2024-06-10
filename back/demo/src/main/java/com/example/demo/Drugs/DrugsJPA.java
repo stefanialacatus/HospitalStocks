@@ -29,7 +29,7 @@ public class DrugsJPA {
     public void setId(Integer id) {
         this.id = id;
     }
-    public String getName(String name) {
+    public String getName() {
         return name;
     }
 
