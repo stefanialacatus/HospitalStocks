@@ -5,6 +5,7 @@ import com.example.demo.DrugEntry.DrugEntryRequest;
 import com.example.demo.Patient.Patient;
 import com.example.demo.Patient.PatientDAO;
 import com.example.demo.Patient.PatientRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/patients")
@@ -21,16 +23,31 @@ public class PatientController {
     private PatientDAO patientsDAO;
 
 
-    /*@GetMapping("/getPatientsInPage")
-    public List<Patient> getPatientsInPage(@RequestParam("page") int page) {
-        // Call the method to get drugs for the given page number
-        return PatientDAO.getPatientsInPage(page);
-    }*/
-
     @Autowired
     private PatientDAO patientDAO;
     private PatientSyncService patientDataSyncService;
-
+    @GetMapping("/findByName")
+    public List<Patient> findPatientsByName(@RequestParam("name") String name) {
+        List<Patient> patients = patientDAO.findByName(name);
+        if (patients == null || patients.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return patients;
+    }
+    @PostMapping("/filter")
+    public List<Patient> filterPatients(@RequestBody String filter) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            Map<String, String> filterMap = mapper.readValue(filter, Map.class);
+            String selectedValue = filterMap.get("selectedValue");
+            List<Patient> patients = patientDAO.filterPatients(selectedValue);
+            System.out.println("Filtering patients");
+            return patients;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
     @GetMapping("/getPatientsInPage")
     public List<Patient> getPatientsInPage(@RequestParam("page") int page) {
         List<Patient> patients = patientDAO.getPatientsInPage(page);

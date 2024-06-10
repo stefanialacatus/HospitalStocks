@@ -6,7 +6,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.stereotype.Repository;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class PatientDAO {
@@ -18,6 +20,23 @@ public class PatientDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    public List<Patient> getAllPatients() {
+        String query = "SELECT p.first_name," +
+                "       p.last_name," +
+                "       i.name AS illness_name " +
+                "FROM patients p " +
+                "JOIN patients_illnesses pi ON p.id = pi.patient_id " +
+                "JOIN illnesses i ON pi.illness_id = i.id";
+
+        List<Patient> patients = jdbcTemplate.query(query, (rs, rowNum) -> {
+            Patient patient = new Patient();
+            patient.setFirstName(rs.getString("first_name"));
+            patient.setLastName(rs.getString("last_name"));
+            patient.setIllnessName(rs.getString("illness_name"));
+            return patient;
+        });
+        return patients;
+    }
     public static List<Patient> getAllIllnesses() {
         String query = "SELECT * FROM Patients";
         return jdbcTemplate.query(query, (rs, rowNum) -> {
@@ -50,6 +69,22 @@ public class PatientDAO {
             return illness;
         });
     }
+
+    public List<Patient> filterPatients(String filter) {
+        System.out.println("filter received: " + filter);
+        List<Patient> patients = getAllPatients();
+        if ("az".equals(filter)) {
+            return patients.stream()
+                    .sorted(Comparator.comparing(Patient::getFirstName))
+                    .collect(Collectors.toList());
+        } else if ("za".equals(filter)) {
+            return patients.stream()
+                    .sorted(Comparator.comparing(Patient::getFirstName).reversed())
+                    .collect(Collectors.toList());
+        }
+        else return patients;
+
+    }
     public static int getCount() {
         String sql = "SELECT COUNT(*) FROM Patients";
         return jdbcTemplate.queryForObject(sql, Integer.class);
@@ -58,19 +93,6 @@ public class PatientDAO {
         String sql = "SELECT name from drugs where id = (select get_most_consumed_drug(CURRENT_DATE))";
         return jdbcTemplate.queryForObject(sql, String.class);
     }
-
-    /*public static List<Patient> getPatientsInPage(int page) {
-        String sql = "SELECT * FROM get_patient_illness_info(?)";
-        return jdbcTemplate.query(sql, new Object[]{page}, (rs, rowNum) -> {
-            Patient patient = new Patient();
-            patient.setFirstName(rs.getString("first_name"));
-            patient.setLastName(rs.getString("last_name"));
-            patient.setIllnessName(rs.getString("illness_name"));
-
-            System.out.println("the info:" + patient);
-            return patient;
-        });
-    }*/
 
     public static List<Patient> getPatientsInPage(int page) {
         String sql = "SELECT * FROM patient_info_nopage()";
@@ -109,4 +131,23 @@ public class PatientDAO {
             return null;
         });
     }
+
+    public List<Patient> searchByName(String name) {
+        String query = "SELECT p.first_name," +
+                "       p.last_name," +
+                "       i.name AS illness_name" +
+                "FROM patients p" +
+                "JOIN patients_illnesses pi ON p.id = pi.patient_id" +
+                "JOIN illnesses i ON pi.illness_id = i.id" +
+                "WHERE p.first_name LIKE ?" +
+                "   OR p.last_name LIKE ?;";
+        return jdbcTemplate.query(query, new Object[]{"%" + name + "%", "%" + name + "%"}, (rs, rowNum) -> {
+            Patient patient = new Patient();
+            patient.setFirstName(rs.getString("first_name"));
+            patient.setLastName(rs.getString("last_name"));
+            patient.setIllnessName(rs.getString("illness_name"));
+            return patient;
+        });
+    }
+
 }
