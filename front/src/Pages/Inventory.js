@@ -3,7 +3,7 @@ import './Inventory.css';
 import axios from 'axios';
 
 const itemsPerPage = 8;
-const totalMedicines = 24; 
+const totalMedicines = 50; 
 const totalPages = Math.ceil(totalMedicines / itemsPerPage); 
 
 function SearchBar({ setMedicines }) {
@@ -26,6 +26,29 @@ function SearchBar({ setMedicines }) {
     const handleChange = (event) => {
         setSearchQuery(event.target.value);
     };
+    const [selectedOption, setSelectedOption] = useState('filter');
+
+    const handleOptionChange = (event) => {
+        const selectedValue = event.target.value;
+        setSelectedOption(selectedValue);
+        sendDataToBackend(selectedValue);
+    };
+    const sendDataToBackend = (selectedValue) => {
+        fetch('http://localhost:8080/drugs/filter', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(selectedValue)
+        })
+        .then(() => {
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('Error sending data to backend:', error);
+        });
+    };
+    
 
     return (
         <div className="search-bar-container">
@@ -50,6 +73,12 @@ function SearchBar({ setMedicines }) {
                     <div key={result.id}>{result.name}</div>
                 ))}
             </div>
+            <select className="filter-drop" value={selectedOption} onChange={handleOptionChange}>
+                <option value="0">Filter</option>
+                <option value="1">A-Z</option>
+                <option value="2">Z-A</option>
+                <option value="3">Quantity</option>
+            </select>
         </div>
     );
 }
@@ -201,6 +230,7 @@ function ConsumptionPopup({ onClose }) {
   }
   
   export default function Inventory() {
+      const [totalMedicines, setTotalMedicines] = useState(0); 
       const [currentPage, setCurrentPage] = useState(1);
       const [searchQuery, setSearchQuery] = useState("");
       const [searchResults, setSearchResults] = useState([]);
@@ -209,7 +239,14 @@ function ConsumptionPopup({ onClose }) {
       const [showConsumptionPopup, setShowConsumptionPopup] = useState(false);
       const [listType, setListType] = React.useState('Medicines');
       const [medicines, setMedicines] = useState([]);
-  
+      const fetchTotalMedicines = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/drugs/count');
+                setTotalMedicines(response.data);
+            } catch (error) {
+                console.error('Error fetching total number of medicines:', error);
+            }
+        };
       const fetchData = async (page) => {
           try {
               const response = await axios.get(`http://localhost:8080/drugs/getDrugsInPage?page=${page}`);
