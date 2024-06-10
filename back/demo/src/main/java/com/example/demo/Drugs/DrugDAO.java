@@ -2,10 +2,10 @@ package com.example.demo.Drugs;
 
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.lang.reflect.Field;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 @Repository
 public class DrugDAO {
-    @Setter
     private static Integer filter = 0;
 
     private static JdbcTemplate jdbcTemplate = null;
@@ -115,5 +114,16 @@ public class DrugDAO {
             System.out.println("the info:" + drug);
             return drug;
         });
+    }
+    public static void setFilter(Integer value) { //Reflection API
+        try {
+            Field field = DrugDAO.class.getDeclaredField("filter");
+            field.setAccessible(true);
+            field.set(null, value);
+
+            System.out.println("FILTER " + value);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }
