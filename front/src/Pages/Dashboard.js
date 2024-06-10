@@ -54,9 +54,8 @@ export default function Dashboard() {
       .then(response => response.json())
       .then(data => setDashboardData(data))
       .catch(error => console.error("Error fetching dashboard data:", error));
-  }, []); // Run only once on component mount  
+  }, []); 
 
-  // Conditional rendering or default values
   const inventoryStatus = dashboardData?.inventory?.status || "No data";
   const myHospitalBudget = dashboardData?.myHospital?.budget || "No data";
   const medicinesInStock = dashboardData?.inventory?.medicinesInStock || "No data";

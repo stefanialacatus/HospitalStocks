@@ -1,54 +1,54 @@
 package com.example.demo.Drugs;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
+@Repository
 public class DrugDAO {
 
     private static JdbcTemplate jdbcTemplate = null;
+
     @Autowired
-    private DrugsRepository drugsRepository;
-
-    public List<Drugs> getAllDrugs() {
-        return drugsRepository.findAll();
+    public DrugDAO(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Drugs findById(int id) {
-        return drugsRepository.findById(id).orElse(null);
+    public static List<Drugs> getAllDrugs() {
+        String query = "SELECT * FROM drugs";
+        return jdbcTemplate.query(query, (rs, rowNum) -> {
+            Drugs drug = new Drugs();
+            drug.setId(rs.getInt("id"));
+            drug.setName(rs.getString("name"));
+            drug.setDosageForm(rs.getString("dosage_form"));
+            drug.setPrice(rs.getBigDecimal("price"));
+            return drug;
+        });
     }
 
-    public List<Drugs> findByName(String name) {
-        return drugsRepository.findByNameContainingIgnoreCase(name);
-    }
-    public int getCount() {
-        return drugsRepository.getCount();
+    public static Drugs findById(int id) {
+        String query = "SELECT * FROM drugs WHERE id = ?";
+        return jdbcTemplate.queryForObject(query, new Object[]{id}, (rs, rowNum) -> {
+            Drugs drug = new Drugs();
+            drug.setId(rs.getInt("id"));
+            drug.setName(rs.getString("name"));
+            drug.setDosageForm(rs.getString("dosage_form"));
+            drug.setPrice(rs.getBigDecimal("price"));
+            return drug;
+        });
     }
 
-<<<<<<< Updated upstream
     public static List<Drugs> findByName(String name) {
-        String query = "SELECT d.name AS drug_name, " +
-                "d.dosage_form, " +
-                "(SELECT i.name FROM illnesses i JOIN illness_drug id ON i.id = id.illness_id WHERE id.drug_id = d.id LIMIT 1) AS illness, " +
-                "d.stock " +
-                "FROM drugs d " +
-                "WHERE d.name LIKE ?";
+        String query = "SELECT * FROM drugs WHERE name LIKE ?";
         return jdbcTemplate.query(query, new Object[]{"%" + name + "%"}, (rs, rowNum) -> {
             Drugs drug = new Drugs();
-            drug.setName(rs.getString("drug_name"));
+            drug.setId(rs.getInt("id"));
+            drug.setName(rs.getString("name"));
             drug.setDosageForm(rs.getString("dosage_form"));
-            drug.setIllness(rs.getString("illness"));
-            drug.setStock(rs.getInt("stock"));
-            System.out.println("Found drug:" + drug);
+            drug.setPrice(rs.getBigDecimal("price"));
             return drug;
         });
     }
@@ -69,21 +69,9 @@ public class DrugDAO {
             drug.setDosageForm(rs.getString("dosage_form"));
             drug.setIllness(rs.getString("illness"));
             drug.setStock(rs.getInt("stock"));
-            //System.out.println("the info:" + drug);
+            System.out.println("the info:" + drug);
             return drug;
         });
-=======
-    public int getMedicinesAvailable() {
-        return drugsRepository.getMedicinesAvailable();
-    }
-
-    /*de aici trb modif pr hibernate*/
-    public List<Map<String, Object>> getDrugsInPage(int page) {
-        int pageSize = 8;
-        Pageable pageable = (Pageable) PageRequest.of(page - 1, pageSize);
-        List<Object[]> results = drugsRepository.findAllDrugSummaries(pageable);
-        return convertToMap(results);
->>>>>>> Stashed changes
     }
 
     public static List<Drugs> getBadDrugsInPage(int page) {
@@ -94,22 +82,8 @@ public class DrugDAO {
             drug.setDosageForm(rs.getString("dosage_form"));
             drug.setIllness(rs.getString("illness"));
             drug.setStock(rs.getInt("stock"));
-            //System.out.println("the info:" + drug);
+            System.out.println("the info:" + drug);
             return drug;
         });
-
-
-    }
-    private List<Map<String, Object>> convertToMap(List<Object[]> results) {
-        List<Map<String, Object>> mappedResults = new ArrayList<>();
-        for (Object[] row : results) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("name", row[0]);
-            map.put("dosageForm", row[1]);
-            map.put("illness", row[2]);
-            map.put("stock", row[3]);
-            mappedResults.add(map);
-        }
-        return mappedResults;
     }
 }
