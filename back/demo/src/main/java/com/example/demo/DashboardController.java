@@ -22,7 +22,8 @@ public class DashboardController {
 
         Map<String, Object> inventorySummary = new HashMap<>();
         inventorySummary.put("status", DrugStockDAO.checkInventoryStatus());
-        inventorySummary.put("medicinesInStock", DrugDAO.getMedicinesAvailable());
+        DrugDAO drugService = new DrugDAO();
+        inventorySummary.put("medicinesInStock", drugService.getMedicinesAvailable());
         inventorySummary.put("medicineShortage", DrugStockDAO.countShortageDrugs());
         dashboardSummary.put("inventory", inventorySummary);
 
