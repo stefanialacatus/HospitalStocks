@@ -80,8 +80,8 @@ public class DrugDAO {
             Drugs drug = new Drugs();
             drug.setName(rs.getString("drug_name"));
             drug.setDosageForm(rs.getString("dosage_form"));
-            drug.setIllness(rs.getString("illness"));
             drug.setStock(rs.getInt("stock"));
+            drug.setStock(rs.getInt("average_stock"));
             System.out.println("the info:" + drug);
             return drug;
         });
