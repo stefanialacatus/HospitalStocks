@@ -5,6 +5,7 @@ import com.example.demo.Drugs.DrugDAO;
 import com.example.demo.Illness.IllnessDAO;
 import com.example.demo.Patient.PatientDAO;
 import com.example.demo.Supplier.SupplierDAO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/dashboard")
 public class DashboardController {
+
+    @Autowired
+    private DashboardSyncService dashboardSync;
 
     @GetMapping("/summary")
     public Map<String, Object> getDashboardSummary() {
@@ -72,5 +76,9 @@ public class DashboardController {
         System.out.println(monthlyStatistics);
 
         return monthlyStatistics;
+    }
+    @GetMapping("/getSynchronizedDashboard")
+    public Map<String, Object> getSynchronizedDashboard() {
+        return dashboardSync.getDashboardCached();
     }
 }

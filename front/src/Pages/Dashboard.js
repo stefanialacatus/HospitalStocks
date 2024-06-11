@@ -88,6 +88,32 @@ export default function Dashboard() {
     fetchData();
   }, []); 
 
+  const fetchDataSync = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error("No token found");
+        return;
+      }
+
+      setAuthToken(token);
+
+      const response = await axios.get("http://localhost:8080/api/v1/dashboard/getSynchronizedDashboard");
+      if (response.status === 200) {
+        setDashboardData(response.data);
+        console.log('[Sync]Dashboard data fetched:', response.data);
+      } else {
+        console.error('Error fetching dashboard data:', response.status, response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching dashboard data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDataSync();
+  }, [60000]);
+
   const inventoryStatus = dashboardData?.inventory?.status || "No data";
   const myHospitalBudget = dashboardData?.myHospital?.budget || "No data";
   const medicinesInStock = dashboardData?.inventory?.medicinesInStock || "No data";
