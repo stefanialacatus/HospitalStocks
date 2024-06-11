@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 body {
-    margin: 0; /* Remove default body margin */
-    background-color: #edf1f5; /* Apply background color */
+    margin: 0; 
+    background-color: #edf1f5; 
   }
 
 .header {
@@ -96,7 +96,7 @@ body {
 }
 
 .subtitle {
-    color: black; /* Default color for subtitle */
+    color: black; 
     font-family: Poppins, sans-serif;
     font-size: 24px;
     font-weight: 700;
@@ -177,7 +177,7 @@ body {
     font-size: 18px;
     border-bottom: 1px solid #e0e0e0;
     font-family: 'Poppins', sans-serif;
-    font-weight: 500; /* Medium weight */
+    font-weight: 500; 
   }
   
   .medicines-table td {
@@ -277,14 +277,14 @@ body {
 
 @media (max-width: 600px) {
     .header {
-        padding: 9px 10px; /* Reduce padding on smaller screens */
+        padding: 9px 10px; 
     }
     
     .header-content {
         flex-direction: row;
         align-items: center;
-        justify-content: space-between; /* Ensure items are spaced out evenly */
-        gap: 10px; /* Reduce gap on smaller screens */
+        justify-content: space-between; 
+        gap: 10px; 
     }
     
     .header-left,
@@ -296,11 +296,11 @@ body {
     
     .header-center {
         flex-grow: 1;
-        justify-content: center; /* Center align items */
+        justify-content: center; 
     }
 
     .medicines-table {
-        width: 90%; /* Reduce table width for smaller screens */
+        width: 90%;
     }
 }
 

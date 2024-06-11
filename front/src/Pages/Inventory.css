@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 body {
-    margin: 0; /* Remove default body margin */
-    background-color: #edf1f5; /* Apply background color */
+    margin: 0; 
+    background-color: #edf1f5; 
   }
 
 .header {
@@ -101,7 +101,7 @@ select.filter-drop {
 }
 
 .subtitle {
-    color: black; /* Default color for subtitle */
+    color: black; 
     font-family: Poppins, sans-serif;
     font-size: 24px;
     font-weight: 700;
@@ -258,7 +258,7 @@ select.filter-drop {
 }
 
 .pagination-controls button img {
-    width: 20px; /* Adjust size of arrow symbols */
+    width: 20px; 
     height: 20px;
     
 }

@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 body {
-    margin: 0; /* Remove default body margin */
-    background-color: #edf1f5; /* Apply background color */
+    margin: 0; 
+    background-color: #edf1f5; 
 }
 
 .header {
@@ -11,8 +11,8 @@ body {
     justify-content: center;
     padding: 9px 20px;
     color: #fff;
-    width: 100%; /* Ensure header spans full width */
-    box-sizing: border-box; /* Include padding in the width */
+    width: 100%; 
+    box-sizing: border-box; 
 }
 
 .header-content {
@@ -21,7 +21,7 @@ body {
     max-width: 1005px;
     gap: 20px;
     justify-content: space-between;
-    align-items: center; /* Center items vertically */
+    align-items: center;
 }
 
 .header-left,
@@ -32,12 +32,12 @@ body {
 }
 
 .header-left {
-    justify-content: flex-start; /* Left align items */
+    justify-content: flex-start; 
 }
 
 .header-center {
     flex-grow: 1;
-    justify-content: center; /* Center align items */
+    justify-content: center; 
     font-family: Poppins, sans-serif;
     font-weight: 500;
     font-size: 14px;
@@ -45,7 +45,7 @@ body {
 }
 
 .header-right {
-    justify-content: flex-end; /* Right align items */
+    justify-content: flex-end; 
 }
 
 .header-logo {
@@ -271,14 +271,14 @@ select.date-drop {
 
 @media (max-width: 600px) {
   .header {
-      padding: 9px 10px; /* Reduce padding on smaller screens */
+      padding: 9px 10px; 
   }
   
   .header-content {
       flex-direction: row;
       align-items: center;
-      justify-content: space-between; /* Ensure items are spaced out evenly */
-      gap: 10px; /* Reduce gap on smaller screens */
+      justify-content: space-between; 
+      gap: 10px; 
   }
   
   .header-left,
@@ -290,7 +290,7 @@ select.date-drop {
   
   .header-center {
       flex-grow: 1;
-      justify-content: center; /* Center align items */
+      justify-content: center; 
   }
 
   .cards {

@@ -68,7 +68,7 @@ function SearchBar({ setMedicines }) {
         });
     };
     const handleOptionClick = (option) => {
-        setSearchQuery(option); // Set search query to selected option
+        setSearchQuery(option); 
         setShowDropdown(false);
     };
 
@@ -181,7 +181,7 @@ function AddNewEntryPopup({ onClose }) {
         axios.post('http://localhost:8080/addEntry', requestPayload)
             .then((response) => {
                 alert('Entry added successfully');
-                onClose(); // Close the popup after successful submission
+                onClose(); 
             })
             .catch((error) => {
                 console.error('Error adding entry:', error);
@@ -189,7 +189,7 @@ function AddNewEntryPopup({ onClose }) {
                     setError(error.response.data); 
                     alert('Insufficient budget. The entry failed.');
                 } else {
-                    setError('Failed to add entry'); // Default error message
+                    setError('Failed to add entry'); 
                     alert(error.response.data);
                 }
             });
@@ -237,7 +237,7 @@ function ConsumptionPopup({ onClose }) {
                       setError(error.response.data); 
                       alert('Error??');
                   } else {
-                      setError('Failed to add consumption'); // Default error message
+                      setError('Failed to add consumption'); 
                       alert(error.response.data);
                   }
               });

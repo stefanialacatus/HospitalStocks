@@ -77,8 +77,8 @@ export default function Inventory() {
             console.log('Medicines:', medicines);
             const chartData = response.data.map(medicine => ({
                 name: medicine.name,
-                pv: medicine.stock, // You can adjust this based on your data structure
-                uv: medicine.average_stock, // You can adjust this based on your data structure
+                pv: medicine.stock, 
+                uv: medicine.average_stock, 
             }));
             setBarChartData(chartData);
         } catch (error) {

@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 body {
-    margin: 0; /* Remove default body margin */
-    background-color: #edf1f5; /* Apply background color */
+    margin: 0; 
+    background-color: #edf1f5; 
   }
 
 .header {
@@ -96,7 +96,7 @@ body {
 }
 
 .subtitle {
-    color: black; /* Default color for subtitle */
+    color: black; 
     font-family: Poppins, sans-serif;
     font-size: 24px;
     font-weight: 700;
@@ -173,40 +173,40 @@ body {
     text-align: center;
     color: rgb(123, 123, 123);
     margin-bottom: 10px;
-    margin-left: 10px; /* Adjust this value to move the dropdown button to the right */
+    margin-left: 10px; 
 }
 
 .filter-dropdown select {
-    padding: 8px 30px 8px 10px; /* Adjust padding to accommodate the icon */
-    border: none; /* Remove the border */
-    border-radius: 4px; /* Add border radius */
-    background-color: #fff; /* Set background color */
-    font-family: 'Poppins', sans-serif; /* Set font family */
-    cursor: pointer; /* Change cursor to pointer */
-    -webkit-appearance: none; /* Remove default appearance */
-    -moz-appearance: none; /* Remove default appearance */
-    appearance: none; /* Remove default appearance */
-    position: relative; /* Position relative for the icon */
+    padding: 8px 30px 8px 10px; 
+    border: none;
+    border-radius: 4px; 
+    background-color: #fff; 
+    font-family: 'Poppins', sans-serif; 
+    cursor: pointer; 
+    -webkit-appearance: none; 
+    -moz-appearance: none; 
+    appearance: none; 
+    position: relative; 
 }
 
 .filter-dropdown select:hover,
 .filter-dropdown select:focus {
-    border-color: #7a6783; /* Change border color on hover and focus */
+    border-color: #7a6783; 
 }
 
 .filter-dropdown select option {
-    padding: 8px 10px; /* Adjust padding */
-    font-family: 'Poppins', sans-serif; /* Set font family */
+    padding: 8px 10px; 
+    font-family: 'Poppins', sans-serif; 
 }
 
 .dropdown-icon {
-    position: absolute; /* Position the icon absolutely */
-    top: 50%; /* Align vertically */
-    right: 10px; /* Adjust distance from the right */
-    transform: translateY(-50%); /* Center vertically */
-    width: 14px; /* Set width */
-    height: 14px; /* Set height */
-    pointer-events: none; /* Disable pointer events */
+    position: absolute; 
+    top: 50%; 
+    right: 10px; 
+    transform: translateY(-50%); 
+    width: 14px; 
+    height: 14px; 
+    pointer-events: none; 
 }
 
 
@@ -230,7 +230,7 @@ body {
     font-size: 18px;
     border-bottom: 1px solid #e0e0e0;
     font-family: 'Poppins', sans-serif;
-    font-weight: 500; /* Medium weight */
+    font-weight: 500; 
   }
   
   .medicines-table td {
