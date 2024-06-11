@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/dashboard")
+@RequestMapping("/api/v1/dashboard")
 public class DashboardController {
 
     @GetMapping("/summary")
