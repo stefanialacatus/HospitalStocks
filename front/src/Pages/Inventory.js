@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './Inventory.css';
+import Header from '../Components/Header';
 import axios from 'axios';
 
 const itemsPerPage = 8;
 const totalMedicines = 50; 
 const totalPages = Math.ceil(totalMedicines / itemsPerPage); 
+const isLoggedIn = 1;
 
 function SearchBar({ setMedicines }) {
     const [searchQuery, setSearchQuery] = useState("");
@@ -125,21 +127,23 @@ function MedicineListItem({ name, dosageForm, illness, stock, id, cost }) {
 
 function MedicinesTable({ medicines }) {
     return (
-        <table className="medicines-table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Dosage Form</th>
-                    <th>Illness</th>
-                    <th>Stock in Qty</th>
-                </tr>
-            </thead>
-            <tbody>
-                {medicines.map((medicine) => (
-                    <MedicineListItem key={medicine.id} {...medicine} />
-                ))}
-            </tbody>
-        </table>
+        <div className='table-container'>
+            <table className="medicines-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Dosage Form</th>
+                        <th>Illness</th>
+                        <th>Stock</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {medicines.map((medicine) => (
+                        <MedicineListItem key={medicine.id} {...medicine} />
+                    ))}
+                </tbody>
+            </table>
+        </div>
     );
 }
 
@@ -340,15 +344,7 @@ function ConsumptionPopup({ onClose }) {
   
       return (
           <>
-              <header className="header">
-                  <div className="header-content">
-                      <div className="header-left">
-                          <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/a0a9d789f882e264c6147f22c9098045cccac58ca47b5236bf41bb05030906c9?apiKey=166a782ca6344aad902f23b81529b6b9&" alt="Stockspital" className="header-logo" />
-                          <div className="header-name">Stockspital</div>
-                      </div>
-                      <div className="header-center">Spital Sf. Maria</div>
-                  </div>
-              </header>
+              <Header isLoggedIn={isLoggedIn} />
               <main className="main-cont">
                   <section className="introducere">
                       <div className="title-section">

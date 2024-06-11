@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -45,5 +47,30 @@ public class DashboardController {
         illnessSummary.put("totalIllnesses", IllnessDAO.getCount());
         dashboardSummary.put("illnesses", illnessSummary);
         return dashboardSummary;
+    }
+    @GetMapping("/monthStatistic")
+    public List<Map<String, Object>> getMonthStatistic() {
+        List<Map<String, Object>> monthlyStatistics = new ArrayList<>();
+        String[] months = {"March", "April", "May", "June", "Next Month"};
+
+        for (String month : months) {
+            if(!month.equals("Next Month")) {
+                Map<String, Object> monthlyData = new HashMap<>();
+                monthlyData.put("month", month);
+                monthlyData.put("MedsConsumed", DrugStockDAO.getMedicinesConsumed(month));
+                monthlyData.put("NoEntries", DrugStockDAO.getNumberOfEntries(month));
+                monthlyStatistics.add(monthlyData);
+            }
+            else {
+                Map<String, Object> predictions = new HashMap<>();
+                predictions.put("month", month);
+                predictions.put("MedsConsumed", DrugStockDAO.getMedicinesConsumedPrediction());
+                predictions.put("NoEntries", DrugStockDAO.getNumberOfEntriesPrediction());
+                monthlyStatistics.add(predictions);
+            }
+        }
+        System.out.println(monthlyStatistics);
+
+        return monthlyStatistics;
     }
 }

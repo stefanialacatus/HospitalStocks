@@ -9,6 +9,7 @@ import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -19,6 +20,36 @@ public class DrugStockDAO {
     @Autowired
     public DrugStockDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public static int getMedicinesConsumedPrediction() {
+        String[] months = {"March", "April", "May", "June"};
+        int[] medicinesConsumed = new int[months.length];
+
+        for (int i = 0; i < months.length; i++) {
+            medicinesConsumed[i] = getMedicinesConsumed(months[i]);
+        }
+
+        double averageIncrease = Arrays.stream(medicinesConsumed, 1, medicinesConsumed.length)
+                .average()
+                .orElse(0);
+
+        return (int) (medicinesConsumed[months.length - 1] + averageIncrease);
+    }
+
+    public static int getNumberOfEntriesPrediction() {
+        String[] months = {"March", "April", "May", "June"};
+        int[] numberOfEntries = new int[months.length];
+
+        for (int i = 0; i < months.length; i++) {
+            numberOfEntries[i] = getNumberOfEntries(months[i]);
+        }
+
+        double averageIncrease = Arrays.stream(numberOfEntries, 1, numberOfEntries.length)
+                .average()
+                .orElse(0);
+
+        return (int) (numberOfEntries[months.length - 1] + averageIncrease);
     }
 
     public Map<String, Map<String, Object>> drugsInPage(int pageNum) {
@@ -66,12 +97,12 @@ public class DrugStockDAO {
         return jdbcTemplate.queryForObject(sql, Integer.class);
     }
 
-    public int getNumberOfEntries(String month) {
+    public static int getNumberOfEntries(String month) {
         String sql = "SELECT COALESCE(calculate_medicines_added(TO_DATE(? || ' 2024', 'Month YYYY')), 0)";
         return jdbcTemplate.queryForObject(sql, Integer.class, month);
     }
 
-    public int getMedicinesConsumed(String month) {
+    public static int getMedicinesConsumed(String month) {
         String sql = "SELECT COALESCE(total_medicines_consumed(TO_DATE(? || ' 2024', 'Month YYYY')), 0)";
         return jdbcTemplate.queryForObject(sql, Integer.class, month);
     }

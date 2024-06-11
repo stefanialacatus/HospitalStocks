@@ -1,7 +1,9 @@
 import * as React from "react";
 import axios from 'axios';
 import { useEffect, useState } from "react";
+import Header from '../Components/Header';
 import style from './Dashboard.css';
+const isLoggedIn = 1;
 
 function Card({ borderColor, bgColor, imageSrc, title, value, description, viewText, altText }) {
   return (
@@ -69,15 +71,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <header className="header">
-        <div className="header-content">
-          <div className="header-left">
-            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/a0a9d789f882e264c6147f22c9098045cccac58ca47b5236bf41bb05030906c9?apiKey=166a782ca6344aad902f23b81529b6b9&" alt="Stockspital" className="header-logo" />
-            <div className="header-name">Stockspital</div>
-          </div>
-          <div className="header-center">Spital Sf. Maria</div>
-        </div>
-      </header>
+      <Header isLoggedIn={isLoggedIn} />
       <main className="main">
         <section className="intro">
           <h1 className="intro-title">Dashboard</h1>

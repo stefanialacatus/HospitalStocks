@@ -200,17 +200,22 @@ body {
 }
 
 .dropdown-icon {
-    position: absolute; 
+    position: absolute;
     top: 50%; 
     right: 10px; 
     transform: translateY(-50%); 
     width: 14px; 
-    height: 14px; 
+    height: 14px;
     pointer-events: none; 
 }
 
 
-
+.table-container {
+    width: 100%;
+    overflow-x: auto; /* Add this to allow horizontal scrolling */
+    margin-top: 7px;
+    background-color: white;
+}
 
 .medicines-table {
     margin-top: 7px;
