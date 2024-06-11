@@ -45,7 +45,10 @@ export default function Dashboard() {
   
   const fetchQuickReport = async (month) => {
     try {
-      const response = await axios.get(`http://localhost:8080/drugstock/getQuickReport?month=${month}`);
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`http://localhost:8080/drugstock/getQuickReport?month=${month}`, 
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       setDashboardData(prevData => ({
         ...prevData,
         quickReport: {

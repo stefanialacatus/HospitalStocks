@@ -12,7 +12,13 @@ function SearchBar({ setPatients, setTotalPatients, setTotalPages, setCurrentPag
 
     const handleSearch = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/patients/searchByName?name=${searchQuery}`);
+            const token = localStorage.getItem('token');
+            const response = await fetch(`http://localhost:8080/patients/searchByName?name=${searchQuery}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            
+            });
             if (!response.ok) {
                 throw new Error("Failed to fetch search results");
             }
@@ -40,10 +46,12 @@ function SearchBar({ setPatients, setTotalPatients, setTotalPages, setCurrentPag
 
     const sendDataToBackend = async (selectedValue) => {
         try {
+            const token = localStorage.getItem('token');
             const response = await fetch('http://localhost:8080/patients/filter', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify({ selectedValue })
             });
@@ -102,7 +110,13 @@ function PatientList({ firstName, lastName, illnessName, id }) {
     };
 
     const handleRemovePatient = () => {
-        axios.delete(`http://localhost:8080/patients/deletePatient/${firstName}/${lastName}`)
+            const token = localStorage.getItem('token');
+    
+            axios.delete(`http://localhost:8080/patients/deletePatient/${firstName}/${lastName}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
             .then((response) => {
                 alert('Patient removed successfully');
                 closeRemoveModal();
@@ -228,8 +242,12 @@ export default function Patients() {
             illnessName: newPatient.illness,
         };
         console.log('Submitting payload:', requestPayload);
-
-        axios.post('http://localhost:8080/patients/addPatient', requestPayload)
+        const token = localStorage.getItem('token');
+        axios.post('http://localhost:8080/patients/addPatient', requestPayload, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then((response) => {
                 alert('Patient added successfully');
                 closeAddModal();
@@ -243,7 +261,16 @@ export default function Patients() {
 
     const fetchData = async (page) => {
         try {
-            const response = await axios.get(`http://localhost:8080/patients/getPatientsInPage?page=${page}`);
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`http://localhost:8080/patients/getPatientsInPage?page=${page}`,
+                {
+                    headers: {
+                         'Authorization': `Bearer ${token}`
+
+                    }
+                }
+
+            );
             setPatients(response.data);
             setTotalPatients(response.data.length);
             setTotalPages(Math.ceil(response.data.length / itemsPerPage));
@@ -273,7 +300,16 @@ export default function Patients() {
 
     const applyFilter = async (filter) => {
         try {
-            const response = await axios.post('http://localhost:8080/patients/filter', { filter });
+            const token = localStorage.getItem('token');
+            const response = await axios.post('http://localhost:8080/patients/filter', { filter }, 
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+
+               }
+            }
+
+            );
             setFilteredPatients(response.data);
             setCurrentFilter(filter);
         } catch (error) {
