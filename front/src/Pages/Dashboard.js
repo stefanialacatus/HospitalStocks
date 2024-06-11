@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useEffect, useState } from "react";
 import Header from '../Components/Header';
 import style from './Dashboard.css';
-const isLoggedIn = 1;
+
 
 function Card({ borderColor, bgColor, imageSrc, title, value, description, viewText, altText }) {
   return (
@@ -26,7 +26,8 @@ export default function Dashboard() {
   const [dashboardData, setDashboardData] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 3);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  
+
+
   const handleMonthChange = (event) => {
     const { value } = event.target;
     const selectedMonthIndex = parseInt(value);
@@ -71,7 +72,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <Header isLoggedIn={isLoggedIn} />
+      <Header/>
       <main className="main">
         <section className="intro">
           <h1 className="intro-title">Dashboard</h1>

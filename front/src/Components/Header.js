@@ -1,8 +1,20 @@
-// Header.js
-
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import styles from './Header.css';
+import { useAuth } from '../context/AuthContext';
 
-const Header = ({ isLoggedIn }) => {
+const Header = () => {
+    const navigate = useNavigate();
+    const handleLogin = () => {
+        navigate('/login');
+    };
+    const { isLoggedIn, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
+
+    
     return (
         <header className="header">
             <div className="header-content">
@@ -12,9 +24,9 @@ const Header = ({ isLoggedIn }) => {
                 </div>
                 <div className="header-right">
                     {isLoggedIn ? (
-                        <a href="/logout">Logout</a>
+                        <button className="logout-button" onClick={handleLogout}>Logout</button>
                     ) : (
-                        <a href="/login">Login</a>
+                        <button className="login-button" onClick={handleLogin}>Login</button>
                     )}
                 </div>
             </div>

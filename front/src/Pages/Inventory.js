@@ -6,7 +6,7 @@ import axios from 'axios';
 const itemsPerPage = 8;
 const totalMedicines = 50; 
 const totalPages = Math.ceil(totalMedicines / itemsPerPage); 
-const isLoggedIn = 1;
+
 
 function SearchBar({ setMedicines }) {
     const [searchQuery, setSearchQuery] = useState("");
@@ -263,6 +263,7 @@ function ConsumptionPopup({ onClose }) {
   }
   
   export default function Inventory() {
+      const [isLoggedIn, setIsLoggedIn] = useState(false);
       const [totalMedicines, setTotalMedicines] = useState(0); 
       const [currentPage, setCurrentPage] = useState(1);
       const [searchQuery, setSearchQuery] = useState("");
