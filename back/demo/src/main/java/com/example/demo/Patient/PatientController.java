@@ -56,22 +56,6 @@ public class PatientController {
         }
         return patients;
     }
-
-   /* @PostMapping("/addPatient")
-    public ResponseEntity<String> addPatient(@RequestBody PatientRequest request) {
-        try {
-            patientDataSyncService.getPatientDAO().addPatient(request.getFirstName(), request.getLastName(), request.getIllnessName());
-            return new ResponseEntity<>("Patient added successfully", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error adding patient: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @DeleteMapping("/deletePatient/{firstName}/{lastName}")
-    public ResponseEntity<String> deletePatient(@PathVariable String firstName, @PathVariable String lastName) {
-        patientDataSyncService.getPatientDAO().deletePatient(firstName, lastName);
-        return new ResponseEntity<>("Patient deleted successfully", HttpStatus.OK);
-    }*/
     @PostMapping("/addPatient")
     public ResponseEntity<String> addPatient(@RequestBody PatientRequest request) {
         try {
@@ -86,6 +70,15 @@ public class PatientController {
     public ResponseEntity<String> deletePatient(@PathVariable String firstName, @PathVariable String lastName) {
         patientsDAO.deletePatient(firstName, lastName);
         return new ResponseEntity<>("Patient deleted successfully", HttpStatus.OK);
+    }
+
+    @GetMapping("/searchByName")
+    public List<Patient> searchByName(@RequestParam("name") String name) {
+        List<Patient> patients = patientDAO.searchByName(name);
+        if (patients == null || patients.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return patients;
     }
 
 }

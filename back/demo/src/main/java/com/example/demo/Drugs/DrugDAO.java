@@ -117,7 +117,7 @@ public class DrugDAO {
             return drug;
         });
     }
-}
+
     public static void setFilter(Integer value) { //Reflection API
         try {
             Field field = DrugDAO.class.getDeclaredField("filter");

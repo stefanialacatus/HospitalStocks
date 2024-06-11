@@ -135,13 +135,13 @@ public class PatientDAO {
     public List<Patient> searchByName(String name) {
         String query = "SELECT p.first_name," +
                 "       p.last_name," +
-                "       i.name AS illness_name" +
-                "FROM patients p" +
-                "JOIN patients_illnesses pi ON p.id = pi.patient_id" +
-                "JOIN illnesses i ON pi.illness_id = i.id" +
-                "WHERE p.first_name LIKE ?" +
-                "   OR p.last_name LIKE ?;";
-        return jdbcTemplate.query(query, new Object[]{"%" + name + "%", "%" + name + "%"}, (rs, rowNum) -> {
+                "       i.name AS illness_name " +
+                "FROM patients p " +
+                "JOIN patients_illnesses pi ON p.id = pi.patient_id " +
+                "JOIN illnesses i ON pi.illness_id = i.id " +
+                "WHERE LOWER(p.first_name) LIKE ? " +
+                "   OR LOWER(p.last_name) LIKE ?;";
+        return jdbcTemplate.query(query, new Object[]{"%" + name.toLowerCase() + "%", "%" + name.toLowerCase() + "%"}, (rs, rowNum) -> {
             Patient patient = new Patient();
             patient.setFirstName(rs.getString("first_name"));
             patient.setLastName(rs.getString("last_name"));
@@ -149,5 +149,6 @@ public class PatientDAO {
             return patient;
         });
     }
+
 
 }

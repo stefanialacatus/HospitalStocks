@@ -307,3 +307,19 @@ body {
     text-decoration: none;
     cursor: pointer;
 }
+.table {
+    overflow-x: auto;
+    max-width: 100%; 
+}
+
+.medicines-table {
+    width: 100%; 
+}
+
+
+@media (max-width: 600px) {
+    .medicines-table th,
+    .medicines-table td {
+        font-size: 14px; 
+    }
+}

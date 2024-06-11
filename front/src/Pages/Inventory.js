@@ -346,7 +346,9 @@ function ConsumptionPopup({ onClose }) {
                           </div>
                       </div>
                       {listType === 'Medicines' ? <SearchBar setMedicines={setMedicines} /> : null}
+                      <div className="table">
                       {listType === 'Medicines' ? <MedicinesTable medicines={medicines} /> : null}
+                        </div>
                       <Pagination
                           currentPage={currentPage}
                           totalPages={totalPages}

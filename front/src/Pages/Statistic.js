@@ -117,7 +117,9 @@ export default function Inventory() {
                             Statistics & Predictions
                         </h1>
                     </div>
+                    <div className="tabel">
                     {listType === 'Medicines' ? <MedicinesTable medicines={medicines} /> : null}
+                    </div>
                     <div className="chart-container">
                         <h2>Medicines Bar Chart</h2>
                         <BarChartExample data={barChartData} />

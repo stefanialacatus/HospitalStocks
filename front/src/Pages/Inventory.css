@@ -127,7 +127,12 @@ select.filter-drop {
 .buttons button:hover {
     background-color: #6a5872;
 }
-
+@media (max-width: 600px) {
+        .buttons button{
+            font-size: 10px;
+            padding: 4px 8px;
+        }
+}
 .search-bar-container {
     display: flex;
     gap: 5px;
@@ -261,3 +266,20 @@ select.filter-drop {
     cursor: pointer;
   }
   
+.table {
+    overflow-x: auto;
+    max-width: 100%; 
+}
+
+.medicines-table {
+    width: 100%; 
+}
+
+
+@media (max-width: 600px) {
+    .medicines-table th,
+    .medicines-table td {
+        font-size: 14px; 
+    }
+    
+}

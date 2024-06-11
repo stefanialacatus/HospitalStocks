@@ -17,7 +17,8 @@ function SearchBar({ setPatients, setTotalPatients, setTotalPages, setCurrentPag
                 throw new Error("Failed to fetch search results");
             }
             const data = await response.json();
-            setPatients(data);
+            setSearchResults(data); 
+            setPatients(data); 
             setTotalPatients(data.length); 
             setTotalPages(Math.ceil(data.length / itemsPerPage)); 
             setCurrentPage(1); 
@@ -105,7 +106,7 @@ function PatientList({ firstName, lastName, illnessName, id }) {
             .then((response) => {
                 alert('Patient removed successfully');
                 closeRemoveModal();
-                /*window.location.reload();*/
+                window.location.reload();
             })
             .catch((error) => {
                 console.error('Error removing patient:', error);
@@ -143,10 +144,14 @@ function PatientList({ firstName, lastName, illnessName, id }) {
 }
 
 function PatientsTable({ patients, currentPage, itemsPerPage, totalPatients }) {
-    const startIndex = (currentPage - 1) * itemsPerPage + 1;
-    const endIndex = Math.min(currentPage * itemsPerPage, totalPatients);
-
-    const displayedPatients = patients.slice(startIndex, endIndex);
+    let displayedPatients;
+    if (patients.length === 1) {
+        displayedPatients = patients;
+    } else {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = Math.min(currentPage * itemsPerPage, totalPatients);
+        displayedPatients = patients.slice(startIndex, endIndex);
+    }
 
     return (
         <table className="medicines-table">
@@ -248,6 +253,7 @@ export default function Patients() {
             console.log('Total pages:', TotalPages);
             console.log('Total patients:', totalPatients);
             console.log('Data fetched:', response.data);
+
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -312,9 +318,8 @@ export default function Patients() {
                         setTotalPatients={setTotalPatients}
                         setTotalPages={setTotalPages}
                         setCurrentPage={setCurrentPage}
-
-                    
-                    />
+                     />
+                    <div className="table">
                     <PatientsTable 
                         patients={currentFilter? filteredPatients : patients} 
                         currentPage={currentPage}
@@ -322,6 +327,7 @@ export default function Patients() {
                         totalPatients={totalPatients}
                     
                     />
+                    </div>
                     <Pagination
                         currentPage={currentPage}
                         totalPages={TotalPages}
