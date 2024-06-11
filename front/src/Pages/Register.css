@@ -1,4 +1,4 @@
-.login-container {
+.reg-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -6,7 +6,7 @@
     background-color: #f0f0f0;
 }
 
-.login-form {
+.reg-form {
     background-color: white;
     padding: 40px;
     border-radius: 8px;
@@ -15,7 +15,7 @@
     text-align: center;
 }
 
-.login-form h2 {
+.reg-form h2 {
     margin-bottom: 20px;
     color: #7a6783;
     font-size: 24px;
@@ -42,7 +42,7 @@
     display: block;
 }
 
-.login {
+.reg {
     width: 100%;
     padding: 10px;
     background-color: #7a6783;
@@ -54,6 +54,6 @@
     margin-top: 20px;
 }
 
-.login:hover {
+.reg:hover {
     background-color: #5a4b63;
 }

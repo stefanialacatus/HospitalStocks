@@ -1,17 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from './Header.css';
+import './Header.css';
 import { useAuth } from '../context/AuthContext';
 
 const Header = () => {
     const navigate = useNavigate();
-    const handleLogin = () => {
-        navigate('/login');
-    };
     const { isLoggedIn, logout } = useAuth();
 
   const handleLogout = () => {
     logout();
+    navigate('/');
   };
 
     
@@ -23,11 +21,7 @@ const Header = () => {
                     <div className="header-name">Stockspital</div>
                 </div>
                 <div className="header-right">
-                    {isLoggedIn ? (
                         <button className="logout-button" onClick={handleLogout}>Logout</button>
-                    ) : (
-                        <button className="login-button" onClick={handleLogin}>Login</button>
-                    )}
                 </div>
             </div>
         </header>

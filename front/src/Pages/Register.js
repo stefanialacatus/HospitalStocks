@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Login.css';
+import './Register.css';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 
 
-const Login = () => {
+const Register = () => {
     const { login } = useAuth();
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
@@ -14,8 +14,8 @@ const Login = () => {
     const onSubmit = async (e) => {
         e.preventDefault();
 
-        try {
-            const response = await fetch('/api/v1/auth/authenticate', {
+        /*try {
+            const response = await fetch('/api/v1/auth/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -27,22 +27,22 @@ const Login = () => {
             });
 
             if (response.ok) {
-                login();
-                navigate('/dashboard');
+                navigate('/');
             } else {
-                console.error('Login failed');
+                console.error('Register failed');
             }
         } catch (error) {
             console.error('Error:', error);
-        }
+        }*/
+       navigate('/');
     };
 
     return (
-        <div className="login-container">
-            <form className="login-form" onSubmit={onSubmit}>
-                <div className="login-header">
-                    <h2>Log In</h2>
-                    <p>Don't have an account? <Link to="/signup">Sign Up</Link>!</p>
+        <div className="reg-container">
+            <form className="reg-form" onSubmit={onSubmit}>
+                <div className="reg-header">
+                    <h2>Sign Up</h2>
+                    <p>Already have an account? <Link to="/">Log In</Link>!</p>
                 </div>
                 <div className="form-group">
                     <label>Username</label>
@@ -64,10 +64,10 @@ const Login = () => {
                         required
                     />
                 </div>
-                <button type="submit" className="login">Log In</button>
+                <button type="submit" className="reg">Sign Up</button>
             </form>
         </div>
     );
 };
 
-export default Login;
+export default Register;

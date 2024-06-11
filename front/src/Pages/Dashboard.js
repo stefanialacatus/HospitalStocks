@@ -2,7 +2,7 @@ import * as React from "react";
 import axios from 'axios';
 import { useEffect, useState } from "react";
 import Header from '../Components/Header';
-import style from './Dashboard.css';
+import './Dashboard.css';
 
 
 function Card({ borderColor, bgColor, imageSrc, title, value, description, viewText, altText }) {
@@ -53,7 +53,7 @@ export default function Dashboard() {
   };
   
   useEffect(() => {
-    fetch("http://localhost:8080/dashboard/summary")
+    fetch("http://localhost:8080/api/v1/dashboard/summary")
       .then(response => response.json())
       .then(data => setDashboardData(data))
       .catch(error => console.error("Error fetching dashboard data:", error));
