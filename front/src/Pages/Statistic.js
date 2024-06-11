@@ -100,10 +100,24 @@ export default function Statistic() {
         consumed: item.MedsConsumed,
         entries: item.NoEntries
     }));
+    const setAuthToken = (token) => {
+        if (token) {
+          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        } else {
+          delete axios.defaults.headers.common['Authorization'];
+        }
+      };
     
 
     const fetchData = async (page) => {
         try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.error("No token found");
+                return;
+              }
+      
+            setAuthToken(token);
             const response = await axios.get(`http://localhost:8080/drugs/getBadDrugsInPage?page=${page}`);
             setMedicines(response.data);
             console.log('Data fetched:', response.data);
@@ -121,7 +135,14 @@ export default function Statistic() {
 
     const fetchConsumptionData = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/dashboard/monthStatistic`);
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.error("No token found");
+                return;
+              }
+      
+            setAuthToken(token);
+            const response = await axios.get(`http://localhost:8080/api/v1/dashboard/monthStatistic`);
             setConsumptionData(response.data);
         } catch (error) {
             console.error('Error fetching consumption data:', error);
