@@ -46,7 +46,7 @@ public class PatientSyncService {
     }
 
     private void synchronizePatientData() {
-        cachedPatients = patientDAO.getAllIllnesses();
+        cachedPatients = patientDAO.getAllPatients();
         LocalDateTime currentTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         System.out.println("Patient data synchronized at " + currentTime.format(formatter));

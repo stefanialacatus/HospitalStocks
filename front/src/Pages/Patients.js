@@ -319,13 +319,40 @@ export default function Patients() {
         }
     };
 
+    const fetchDataSync = async (page) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`http://localhost:8080/patients/getSynchronizedPatients?page=${page}`,
+                {
+                    headers: {
+                         'Authorization': `Bearer ${token}`
+
+                    }
+                }
+
+            );
+            setPatients(response.data);
+            setTotalPatients(response.data.length);
+            setTotalPages(Math.ceil(response.data.length / itemsPerPage));
+            if (currentFilter) {
+                applyFilter(currentFilter);
+            }
+            console.log('[Sync]Total pages:', TotalPages);
+            console.log('[Sync]Total patients:', totalPatients);
+            console.log('[Sync]Data fetched:', response.data);
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
     useEffect(() => {
         const interval = setInterval(() => {
-            fetchData(currentPage);
+            fetchDataSync(currentPage);
         }, 60000);
 
         return () => clearInterval(interval);
-    }, [currentFilter]);
+    }, []);
 
     useEffect(() => {
         fetchData(currentPage);

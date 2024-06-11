@@ -25,6 +25,7 @@ public class PatientController {
 
     @Autowired
     private PatientDAO patientDAO;
+    @Autowired
     private PatientSyncService patientDataSyncService;
     @GetMapping("/findByName")
     public List<Patient> findPatientsByName(@RequestParam("name") String name) {
@@ -79,6 +80,11 @@ public class PatientController {
             return Collections.emptyList();
         }
         return patients;
+    }
+
+    @GetMapping("/getSynchronizedPatients")
+    public List<Patient> getSynchronizedPatients(@RequestParam("page") int page) {
+        return patientDataSyncService.getCachedPatients();
     }
 
 }
