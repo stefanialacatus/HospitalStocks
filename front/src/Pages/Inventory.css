@@ -231,7 +231,7 @@ select.filter-drop {
     font-size: 18px;
     border-bottom: 1px solid #e0e0e0;
     font-family: 'Poppins', sans-serif;
-    font-weight: 500; /* Medium weight */
+    font-weight: 500; 
   }
   
   .medicines-table td {

@@ -212,7 +212,7 @@ body {
 
 .table-container {
     width: 100%;
-    overflow-x: auto; /* Add this to allow horizontal scrolling */
+    overflow-x: auto;
     margin-top: 7px;
     background-color: white;
 }

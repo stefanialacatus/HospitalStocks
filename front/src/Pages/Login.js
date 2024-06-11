@@ -33,12 +33,8 @@ const Login = () => {
             if (response.ok) {
                 const { token } = await response.json();
                 storeToken(token);
-
-                // Set token in authorization header for future requests
                 const headers = new Headers();
                 headers.append('Authorization', `Bearer ${token}`);
-
-                // Update auth context
                 login();
 
                 navigate('/dashboard');
