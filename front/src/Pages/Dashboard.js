@@ -27,6 +27,13 @@ export default function Dashboard() {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 3);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
+  const setAuthToken = (token) => {
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    } else {
+      delete axios.defaults.headers.common['Authorization'];
+    }
+  };
 
   const handleMonthChange = (event) => {
     const { value } = event.target;
@@ -53,10 +60,29 @@ export default function Dashboard() {
   };
   
   useEffect(() => {
-    fetch("http://localhost:8080/api/v1/dashboard/summary")
-      .then(response => response.json())
-      .then(data => setDashboardData(data))
-      .catch(error => console.error("Error fetching dashboard data:", error));
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          console.error("No token found");
+          return;
+        }
+
+        setAuthToken(token);
+
+        const response = await axios.get("http://localhost:8080/api/v1/dashboard/summary");
+        if (response.status === 200) {
+          setDashboardData(response.data);
+          console.log('Dashboard data fetched:', response.data);
+        } else {
+          console.error('Error fetching dashboard data:', response.status, response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      }
+    };
+
+    fetchData();
   }, []); 
 
   const inventoryStatus = dashboardData?.inventory?.status || "No data";

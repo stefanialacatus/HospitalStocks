@@ -11,11 +11,15 @@ const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
+    function storeToken(token) {
+        localStorage.setItem('token', token);
+      }
+
     const onSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const response = await fetch('/api/v1/auth/authenticate', {
+            const response = await fetch('http://localhost:8080/api/v1/auth/authenticate', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -27,7 +31,16 @@ const Login = () => {
             });
 
             if (response.ok) {
+                const { token } = await response.json();
+                storeToken(token);
+
+                // Set token in authorization header for future requests
+                const headers = new Headers();
+                headers.append('Authorization', `Bearer ${token}`);
+
+                // Update auth context
                 login();
+
                 navigate('/dashboard');
             } else {
                 console.error('Login failed');
@@ -36,6 +49,7 @@ const Login = () => {
             console.error('Error:', error);
         }
     };
+
 
     return (
         <div className="login-container">

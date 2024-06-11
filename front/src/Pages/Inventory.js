@@ -15,7 +15,12 @@ function SearchBar({ setMedicines }) {
 
     const handleSearch = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/drugs/findByName?name=${searchQuery}`);
+            const token = localStorage.getItem('token');
+            const response = await fetch(`http://localhost:8080/drugs/findByName?name=${searchQuery}`, 
+            {
+                headers: { 'Authorization': `Bearer ${token}` }
+                }
+            );
             if (!response.ok) {
                 throw new Error("Failed to fetch search results");
             }
@@ -32,7 +37,9 @@ function SearchBar({ setMedicines }) {
 
         if (searchTerm) {
             try {
-                const response = await fetch(`http://localhost:8080/drugs/search?name=${searchTerm}`);
+                const token = localStorage.getItem('token');
+                const response = await fetch(`http://localhost:8080/drugs/search?name=${searchTerm}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }});
                 if (!response.ok) {
                     throw new Error("Failed to fetch search results");
                 }
@@ -55,10 +62,12 @@ function SearchBar({ setMedicines }) {
         sendDataToBackend(selectedValue);
     };
     const sendDataToBackend = (selectedValue) => {
+        const token = localStorage.getItem('token');
         fetch('http://localhost:8080/drugs/filter', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(selectedValue)
         })
@@ -181,8 +190,10 @@ function AddNewEntryPopup({ onClose }) {
             quantity: parseInt(formData.quantity, 10),
         };
         console.log('Submitting payload:', requestPayload);
-
-        axios.post('http://localhost:8080/addEntry', requestPayload)
+        const token = localStorage.getItem('token');
+        axios.post('http://localhost:8080/addEntry', requestPayload, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
             .then((response) => {
                 alert('Entry added successfully');
                 onClose(); 
@@ -229,8 +240,10 @@ function ConsumptionPopup({ onClose }) {
             quantity: parseInt(formData.quantity, 10),
         };
         console.log('Submitting payload:', requestPayload);
-
-        axios.post('http://localhost:8080/consumeEntry', requestPayload)
+        const token = localStorage.getItem('token');
+        axios.post('http://localhost:8080/consumeEntry', requestPayload, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
             .then((response) => {
                 alert('Consumption added successfully');
                 onClose();
@@ -275,7 +288,10 @@ function ConsumptionPopup({ onClose }) {
       const [medicines, setMedicines] = useState([]);
       const fetchTotalMedicines = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/drugs/count');
+                const token = localStorage.getItem('token');
+                const response = await axios.get('http://localhost:8080/drugs/count', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
                 setTotalMedicines(response.data);
             } catch (error) {
                 console.error('Error fetching total number of medicines:', error);
@@ -283,7 +299,10 @@ function ConsumptionPopup({ onClose }) {
         };
       const fetchData = async (page) => {
           try {
-              const response = await axios.get(`http://localhost:8080/drugs/getDrugsInPage?page=${page}`);
+              const token = localStorage.getItem('token');
+              const response = await axios.get(`http://localhost:8080/drugs/getDrugsInPage?page=${page}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
               setMedicines(response.data);
               console.log('Data fetched:', response.data);
               console.log('Medicines:', medicines);
@@ -295,6 +314,8 @@ function ConsumptionPopup({ onClose }) {
       useEffect(() => {
           fetchData(currentPage);
       }, [currentPage]);
+
+    
   
       const handleNextPage = () => {
           setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
@@ -306,7 +327,10 @@ function ConsumptionPopup({ onClose }) {
   
       const handleSearch = async () => {
           try {
-              const response = await fetch(`http://localhost:8080/drugs/findByName?name=${searchQuery}`);
+              const token = localStorage.getItem('token');
+              const response = await fetch(`http://localhost:8080/drugs/findByName?name=${searchQuery}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
               if (!response.ok) {
                   throw new Error("Failed to fetch search results");
               }
@@ -330,10 +354,12 @@ function ConsumptionPopup({ onClose }) {
         const formData = new FormData();
         formData.append('file', file);
 
+        const token = localStorage.getItem('token');
         try {
             const response = await axios.post('http://localhost:8080/importFile', formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}`
                 }
             });
             alert('File uploaded successfully');

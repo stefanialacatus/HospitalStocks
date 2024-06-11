@@ -7,10 +7,11 @@ const Header = () => {
     const navigate = useNavigate();
     const { isLoggedIn, logout } = useAuth();
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        logout();
+        navigate('/');
+    };
 
     
     return (

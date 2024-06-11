@@ -14,8 +14,8 @@ const Register = () => {
     const onSubmit = async (e) => {
         e.preventDefault();
 
-        /*try {
-            const response = await fetch('/api/v1/auth/register', {
+        try {
+            const response = await fetch('http://localhost:8080/api/v1/auth/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -25,7 +25,6 @@ const Register = () => {
                     password,
                 }),
             });
-
             if (response.ok) {
                 navigate('/');
             } else {
@@ -33,8 +32,7 @@ const Register = () => {
             }
         } catch (error) {
             console.error('Error:', error);
-        }*/
-       navigate('/');
+        }
     };
 
     return (
