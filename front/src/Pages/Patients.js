@@ -3,6 +3,7 @@ import './Patients.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Header from '../Components/Header';
+import { jwtDecode } from 'jwt-decode'
 
 const itemsPerPage = 8;
 
@@ -101,7 +102,19 @@ function SearchBar({ setPatients, setTotalPatients, setTotalPages, setCurrentPag
 
 function PatientList({ firstName, lastName, illnessName, id }) {
     const [showRemoveModal, setShowRemoveModal] = React.useState(false);
-
+    const [userRole, setUserRole] = useState('');
+    useEffect(() => {
+        fetchUserRole();
+    }, []);
+    const fetchUserRole = () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            const userRole = decodedToken.role;
+            console.log(userRole);
+            setUserRole(userRole);
+        }
+    };
     const openRemoveModal = () => {
         setShowRemoveModal(true);
     };
@@ -136,22 +149,26 @@ function PatientList({ firstName, lastName, illnessName, id }) {
             <td>{lastName}</td>
             <td>{illnessName}</td>
             <td className="view-details">
-                <span onClick={openRemoveModal}>Remove Patient</span>
-                <img
-                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/756c414269a215514297154b085d87a50de4ddb17649baf6c9a306c311aeb3fd?apiKey=92503cb420154d6c95f36ba59a7a554b&"
-                    alt="Detail Icon"
-                    className="detail-icon"
-                />
-                {showRemoveModal && (
-                    <div className="modal">
-                        <div className="modal-content">
-                            <span className="close" onClick={closeRemoveModal}>&times;</span>
-                            <h2>Remove Patient</h2>
-                            <p>Please confirm removing patient:</p>
-                            <p>{`${firstName} ${lastName}`}</p>
-                            <button onClick={handleRemovePatient}>Remove Patient</button>
+                {userRole !== 'USER' && ( 
+                    <>
+                    <span onClick={openRemoveModal}>Remove Patient</span>
+                    <img
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/756c414269a215514297154b085d87a50de4ddb17649baf6c9a306c311aeb3fd?apiKey=92503cb420154d6c95f36ba59a7a554b&"
+                        alt="Detail Icon"
+                        className="detail-icon"
+                    />
+                    {showRemoveModal && (
+                        <div className="modal">
+                            <div className="modal-content">
+                                <span className="close" onClick={closeRemoveModal}>&times;</span>
+                                <h2>Remove Patient</h2>
+                                <p>Please confirm removing patient:</p>
+                                <p>{`${firstName} ${lastName}`}</p>
+                                <button onClick={handleRemovePatient}>Remove Patient</button>
+                            </div>
                         </div>
-                    </div>
+                    )}
+                    </>
                 )}
             </td>
         </tr>
@@ -167,6 +184,19 @@ function PatientsTable({ patients, currentPage, itemsPerPage, totalPatients }) {
         const endIndex = Math.min(currentPage * itemsPerPage, totalPatients);
         displayedPatients = patients.slice(startIndex, endIndex);
     }
+    const [userRole, setUserRole] = useState('');
+    useEffect(() => {
+        fetchUserRole();
+    }, []);
+    const fetchUserRole = () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            const userRole = decodedToken.role;
+            console.log(userRole);
+            setUserRole(userRole);
+        }
+    };
 
     return (
         <table className="medicines-table">
@@ -175,12 +205,14 @@ function PatientsTable({ patients, currentPage, itemsPerPage, totalPatients }) {
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Illness</th>
-                    <th>Action</th>
+                    {userRole !== 'USER' && ( 
+                        <><th>Action</th></>
+                    )}
                 </tr>
             </thead>
             <tbody>
-                {displayedPatients.map((patient) => (
-                    <PatientList key={patient.id} {...patient} />
+                {displayedPatients.map((patient, index) => (
+                    <PatientList key={`${patient.id}-${index}`} {...patient} />
                 ))}
             </tbody>
         </table>
@@ -325,6 +357,19 @@ export default function Patients() {
     const handlePreviousPage = () => {
         setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
     };
+    const [userRole, setUserRole] = useState('');
+    useEffect(() => {
+        fetchUserRole();
+    }, []);
+    const fetchUserRole = () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            const userRole = decodedToken.role;
+            console.log(userRole);
+            setUserRole(userRole);
+        }
+    };
 
     return (
         <>
@@ -337,9 +382,13 @@ export default function Patients() {
                             <span className="subtitle">{` > List of Patients`}</span>
                         </h1>
                         <div className="buttons">
-                            <button className="add-button" onClick={openAddModal}>
-                                Add Patient
-                            </button>
+                            {userRole !== 'USER' && (
+                                <>
+                                    <button className="add-button" onClick={openAddModal}>
+                                        Add Patient
+                                    </button>
+                                </>
+                            )}
                         </div>
                     </div>
                     <SearchBar 

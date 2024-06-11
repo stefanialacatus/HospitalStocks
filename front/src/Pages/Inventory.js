@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Inventory.css';
 import Header from '../Components/Header';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode'
 
 const itemsPerPage = 8;
 const totalMedicines = 50; 
@@ -12,6 +13,7 @@ function SearchBar({ setMedicines }) {
     const [searchQuery, setSearchQuery] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     const [showDropdown, setShowDropdown] = useState(false);
+    
 
     const handleSearch = async () => {
         try {
@@ -147,8 +149,8 @@ function MedicinesTable({ medicines }) {
                     </tr>
                 </thead>
                 <tbody>
-                    {medicines.map((medicine) => (
-                        <MedicineListItem key={medicine.id} {...medicine} />
+                    {medicines.map((medicine, index) => (
+                        <MedicineListItem key={medicine.id || index} {...medicine} />
                     ))}
                 </tbody>
             </table>
@@ -286,6 +288,18 @@ function ConsumptionPopup({ onClose }) {
       const [showConsumptionPopup, setShowConsumptionPopup] = useState(false);
       const [listType, setListType] = React.useState('Medicines');
       const [medicines, setMedicines] = useState([]);
+      const [userRole, setUserRole] = useState('');
+
+      const fetchUserRole = () => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                const decodedToken = jwtDecode(token);
+                const userRole = decodedToken.role;
+                console.log(userRole);
+                setUserRole(userRole);
+            }
+        };
+        
       const fetchTotalMedicines = async () => {
             try {
                 const token = localStorage.getItem('token');
@@ -313,6 +327,8 @@ function ConsumptionPopup({ onClose }) {
   
       useEffect(() => {
           fetchData(currentPage);
+          fetchTotalMedicines();
+          fetchUserRole();
       }, [currentPage]);
 
     
@@ -380,21 +396,25 @@ function ConsumptionPopup({ onClose }) {
                               <span className="subtitle">{` > List of ${listType}`}</span>
                           </h1>
                           <div className="buttons">
-                              <button className="add-button" onClick={handleAddNewEntryClick}>
-                                  {listType === 'Medicines' ? 'New Entry' : 'New Illness Group'}
-                              </button>
-                              <button className="remove-button" onClick={handleConsumptionClick}>
-                                  Consume Entry
-                              </button>
-                              <input 
-                                  type="file" 
-                                  id="fileUpload" 
-                                  style={{ display: 'none' }} 
-                                  onChange={handleFileUpload} 
-                              />
-                              <button className="file-button" onClick={() => document.getElementById('fileUpload').click()}>
-                                  Upload Entry File
-                              </button>
+                            {userRole !== 'USER' && ( 
+                                <>
+                                    <button className="add-button" onClick={handleAddNewEntryClick}>
+                                        {listType === 'Medicines' ? 'New Entry' : 'New Illness Group'}
+                                    </button>
+                                    <button className="remove-button" onClick={handleConsumptionClick}>
+                                        Consume Entry
+                                    </button>
+                                    <input 
+                                        type="file" 
+                                        id="fileUpload" 
+                                        style={{ display: 'none' }} 
+                                        onChange={handleFileUpload} 
+                                    />
+                                    <button className="file-button" onClick={() => document.getElementById('fileUpload').click()}>
+                                        Upload Entry File
+                                    </button>
+                                </>
+                            )}
                           </div>
                       </div>
                       {listType === 'Medicines' ? <SearchBar setMedicines={setMedicines} /> : null}
