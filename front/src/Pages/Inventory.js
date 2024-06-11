@@ -9,6 +9,7 @@ const totalPages = Math.ceil(totalMedicines / itemsPerPage);
 function SearchBar({ setMedicines }) {
     const [searchQuery, setSearchQuery] = useState("");
     const [searchResults, setSearchResults] = useState([]);
+    const [showDropdown, setShowDropdown] = useState(false);
 
     const handleSearch = async () => {
         try {
@@ -23,8 +24,26 @@ function SearchBar({ setMedicines }) {
         }
     };
 
-    const handleChange = (event) => {
-        setSearchQuery(event.target.value);
+    const handleChange = async (e) => {
+        const searchTerm = e.target.value;
+        setSearchQuery(searchTerm);
+
+        if (searchTerm) {
+            try {
+                const response = await fetch(`http://localhost:8080/drugs/search?name=${searchTerm}`);
+                if (!response.ok) {
+                    throw new Error("Failed to fetch search results");
+                }
+                const data = await response.json();
+                setSearchResults(data);
+                setShowDropdown(true);
+            } catch (error) {
+                console.error("Error searching drugs:", error);
+            }
+        } else {
+            setSearchResults([]);
+            setShowDropdown(false);
+        }
     };
     const [selectedOption, setSelectedOption] = useState('filter');
 
@@ -48,7 +67,10 @@ function SearchBar({ setMedicines }) {
             console.error('Error sending data to backend:', error);
         });
     };
-    
+    const handleOptionClick = (option) => {
+        setSearchQuery(option); // Set search query to selected option
+        setShowDropdown(false);
+    };
 
     return (
         <div className="search-bar-container">
@@ -58,7 +80,7 @@ function SearchBar({ setMedicines }) {
                     placeholder="Search Medicine Inventory.."
                     className="search-input"
                     value={searchQuery}
-                    onChange={handleChange}
+                    onChange={(e) => handleChange(e)}
                 />
                 <button onClick={handleSearch}>
                     <img
@@ -68,11 +90,19 @@ function SearchBar({ setMedicines }) {
                     />
                 </button>
             </div>
-            <div>
-                {searchResults.map((result) => (
-                    <div key={result.id}>{result.name}</div>
-                ))}
-            </div>
+            {showDropdown && (
+                <div className="search-results-dropdown">
+                    {searchResults.map((result) => (
+                        <div
+                            key={result.id}
+                            onClick={() => handleOptionClick(result.name)}
+                            className="search-result-item"
+                        >
+                            {result.name}
+                        </div>
+                    ))}
+                </div>
+            )}
             <select className="filter-drop" value={selectedOption} onChange={handleOptionChange}>
                 <option value="0">Filter</option>
                 <option value="1">A-Z</option>
@@ -82,7 +112,6 @@ function SearchBar({ setMedicines }) {
         </div>
     );
 }
-
 function MedicineListItem({ name, dosageForm, illness, stock, id, cost }) {
     return (
         <tr className="medicine-list-item">
