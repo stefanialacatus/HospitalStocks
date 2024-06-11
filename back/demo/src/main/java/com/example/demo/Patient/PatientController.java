@@ -52,7 +52,7 @@ public class PatientController {
     public List<Patient> getPatientsInPage(@RequestParam("page") int page) {
         List<Patient> patients = patientDAO.getPatientsInPage(page);
         if (patients == null || patients.isEmpty()) {
-            return Collections.emptyList(); // Return an empty list if no patients found
+            return Collections.emptyList();
         }
         return patients;
     }
