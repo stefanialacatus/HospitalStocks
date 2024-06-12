@@ -111,8 +111,13 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    fetchDataSync();
-  }, [60000]);
+    const interval = setInterval(() => {
+        fetchDataSync();
+    }, 60000);
+
+    return () => clearInterval(interval);
+}, []);
+
 
   const inventoryStatus = dashboardData?.inventory?.status || "No data";
   const myHospitalBudget = dashboardData?.myHospital?.budget || "No data";
