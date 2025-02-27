@@ -4,24 +4,26 @@ It aims to streamline hospital inventory management by tracking medicine stock l
 This helps ensure that necessary medicines are always available to meet patient needs.
 
 ## Features
-### Dashboard: Displays real-time statistics, including medicine stock levels and alerts for shortages.
 
-### Inventory Management: Tracks medicines entering and leaving the hospital, including supplier information and quantities.
+Dashboard: Displays real-time statistics, including medicine stock levels and alerts for shortages.
 
-### Medicine Shortage Alerts: Notifies hospital staff in case of medicine shortages, ensuring critical supplies are never missed.
+Inventory Management: Tracks medicines entering and leaving the hospital, including supplier information and quantities.
 
-### Patient Data Management: Integrates with patient data to track medicine usage and monitor inventory needs.
+Medicine Shortage Alerts: Notifies hospital staff in case of medicine shortages, ensuring critical supplies are never missed.
 
-### Secure User Access: Uses JWT authentication to ensure secure and role-based user access to different features of the application.
+Patient Data Management: Integrates with patient data to track medicine usage and monitor inventory needs.
+
+Secure User Access: Uses JWT authentication to ensure secure and role-based user access to different features of the application.
 
 ## Tech Stack
-### Backend: Built using Java Spring for creating RESTful APIs.
 
-### Database: PostgreSQL for storing and managing all hospital data, with PL/SQL functions used for efficient inventory management and data analysis.
+Backend: Built using Java Spring for creating RESTful APIs.
 
-### Frontend: React for a responsive and dynamic user interface, styled with CSS for modern design.
+Database: PostgreSQL for storing and managing all hospital data, with PL/SQL functions used for efficient inventory management and data analysis.
 
-### Security: Implemented JWT authentication to ensure secure user login and access control.
+Frontend: React for a responsive and dynamic user interface, styled with CSS for modern design.
+
+Security: Implemented JWT authentication to ensure secure user login and access control.
 
 ## Architecture
 
